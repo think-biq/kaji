@@ -24,5 +24,8 @@ clean:
 run:
 	staging/./kaji-example-counter $(MODE)
 
+run-gedanken:
+	staging/./kaji-example-gedanken
+
 symbols:
 	nm -an staging/kaji-example-gedanken | c++filt
