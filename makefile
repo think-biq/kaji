@@ -16,7 +16,7 @@ clean:
 	rm -rf staging
 
 run:
-	staging/./asshat $(MODE)
+	staging/./kaji-example-counter $(MODE)
 
 symbols:
-	nm -an staging/asshat | c++filt
+	nm -an staging/kaji-example-gedanken | c++filt
