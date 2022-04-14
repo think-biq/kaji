@@ -12,8 +12,8 @@
 #include <errno.h>
 
 #include <tempora/all.h>
+#include <spirits/all.h>
 #include <kaji/kaji.h>
-#include <kaji/spirits.h>
 
 static uint8_t keep_running = 1;
 void
@@ -183,8 +183,6 @@ treat_memory(int mode, kaji_t* kaji) {
 		}
 	}
 	else if (1 == mode) {
-		printf("Clearing shared memory ...\n");
-		kaji_blank(kaji);
 		printf("Writing stuff to shared memory ...\n");
 		uint64_t k = ~0;
 		uint32_t* kp = kaji_spell(kaji, sizeof(mapped_data_t)*2, (uint8_t*)&k, sizeof k);
@@ -208,20 +206,24 @@ treat_memory(int mode, kaji_t* kaji) {
 		while (keep_running) {
 			msleep(333);
 			++(memory->timing);
-			/*if (0 != kaji_sync_fragment(kaji, &one, 1)) {
+			// Since we have access to the fragment, we instruct kaji to only
+			// sync the pages holding the fragment's data.
+			if (0 != kaji_sync_fragment(kaji, &one, 1)) {
 				printf("Error syncing ONE: errno(%i): %s\n"
 					, errno, strerror(errno));
-			}*/
+			}
 
 			other_memory->timing = memory->timing + 10;
-			/*if (0 != kaji_sync_fragment(kaji, &two, 1)) {
+			if (0 != kaji_sync_fragment(kaji, &two, 1)) {
 				printf("Error syncing TWO: errno(%i): %s\n"
 					, errno, strerror(errno));
-			}*/
-			if (0 != kaji_sync(kaji, 0)) {
+			}
+
+			//Alternativly sync the whole file.
+			/*if (0 != kaji_sync(kaji, 0)) {
 				printf("Error syncing file: errno(%i): %s\n"
 					, errno, strerror(errno));
-			}
+			}*/
 
 			printf("\rTiming:\t%u, Other timing:\t%u"
 				, memory->timing, other_memory->timing);

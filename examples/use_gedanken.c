@@ -14,8 +14,8 @@
 #include <dlfcn.h> // dlsym
 
 #include <tempora/all.h>
+#include <spirits/all.h>
 #include <kaji/kaji.h>
-#include <kaji/spirits.h>
 #include <kaji/gedanken.h>
 
 int main () {

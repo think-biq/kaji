@@ -71,6 +71,12 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/deps/tempora/CMakeLists.txt")
 endif()
 add_subdirectory(deps/tempora)
 
+# 
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/deps/spirits/CMakeLists.txt")
+    message(FATAL_ERROR "The submodule 'spirits' could not be fetched! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+add_subdirectory(deps/spirits)
+
 # Collect source and header files.
 file(GLOB_RECURSE SRC
     ${PROJECT_SOURCE_DIR}/src/*.c
@@ -80,8 +86,8 @@ target_include_directories(kaji PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/inc/>
 )
 set_property(TARGET kaji PROPERTY C_STANDARD 11)
-add_dependencies(kaji tempora)
-target_link_libraries(kaji tempora)
+add_dependencies(kaji tempora spirits)
+target_link_libraries(kaji tempora spirits)
 
 #.
 add_executable(kaji-example-counter EXCLUDE_FROM_ALL

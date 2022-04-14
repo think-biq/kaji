@@ -21,8 +21,9 @@
 #include <math.h>
 #include <dlfcn.h> // dlsym
 
+#include <spirits/all.h>
+
 #include <kaji/kaji.h>
-#include <kaji/spirits.h>
 
 #ifdef _WIN32
 #define KAJI_PATH_SIZE 256
@@ -81,9 +82,11 @@ kaji_print_spirits(kaji_t* ctx) {
 kaji_t*
 kaji_materialize() {
 	__kaji_initialize_memory_functions();
-	spirits_initialize_memory_functions();
 
-	return __kaji_malloc(sizeof(kaji_t));
+	kaji_t* kaji = __kaji_malloc(sizeof(kaji_t));
+	spirits_summon(&(kaji->spirits), 0);
+
+	return kaji;
 }
 
 void
