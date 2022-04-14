@@ -11,8 +11,6 @@
 
 #ifdef USE_GEDANKEN
 
-#warning "Using proper gedanken API!"
-
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -34,7 +32,9 @@ void gedanken_shutdown();
 
 #else
 
-#define gedanken_initialize(...) 0.
+#warning "Disabling gedanken. Using stubs for API calls!"
+
+#define gedanken_initialize(...) 1
 #define gedanken_kaji() 0
 #define gedanken_is_activated() 0
 #define gedanken_activate(...) {}

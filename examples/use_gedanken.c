@@ -20,13 +20,19 @@
 
 int main () {
 	if (0 != gedanken_initialize(1024, "wurstwasser.ipc")) { // 1 KB
-		return 42;
+		printf("Could not setup gedanken!\n");
 	}
 
 	// Use gedanken memory management.
-	printf("With gedanken ...\n");
+	if (gedanken_is_activated())
 	{
+		printf("Trying with gedanken ...\n");
+
 		struct kaji* kaji = gedanken_kaji();
+		if (NULL == kaji) {
+			printf("Could not fetch kaji!\n");
+			return 23;
+		}
 		const char* path = kaji_path(kaji);
 		printf("Using %s as virtually mapped memory ...\n", path);
 		kaji_print_spirits(kaji);
@@ -45,6 +51,9 @@ int main () {
 		else {
 			printf("HEULL!\n");
 		}
+	}
+	else {
+		printf("Skipping gedanken memory example ...\n");
 	}
 
 	// Use system memory management.
