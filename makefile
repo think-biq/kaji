@@ -1,9 +1,9 @@
 # 2021-∞ (c) blurryroots innovation qanat OÜ. All rights reserved.
 # See license.md for details.
 
-all: prepare build
+all: prepare build build-examples
 all-release: prepare-release build
-examples: all build-examples
+examples: build-examples
 
 prepare:
 	cmake -B staging -DCMAKE_BUILD_TYPE=Debug -DUSE_GEDANKEN=1

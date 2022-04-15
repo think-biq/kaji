@@ -74,14 +74,14 @@ int main(int argc, char** argv) {
 	output_permissions(fs.st_mode);
 	printf("filesize: %lld\n", fs.st_size);
 
-	uint64_t bind_size = 16*1024*1024; // 16MB
+	uint64_t bind_size = 1*1024*1024; // 16MB
 	kaji_t* kaji = kaji_materialize();
 	fprintf(stderr, "Binding ...\n");
 	while (0 != kaji_bind(kaji, tmppath, bind_size)) {
 		fprintf(stderr, "Error binding :/ (errno: %i, %s)\n"
 			, errno, strerror(errno));
 		if (ENOMEM == errno) {
-			fprintf(stderr, "Resizing / filling ...\n");
+			fprintf(stderr, "Resizing / filling %llu bytes ...\n", bind_size);
 			kaji_zero(tmppath, bind_size);
 			fprintf(stderr, "Retrying binding ...\n");
 		}
