@@ -1,0 +1,38 @@
+// 2022-∞ (c) blurryroots innovation qanat OÜ. All rights reserved.
+// See license.md for details.
+/*! \file fragment.h
+	\brief Abstraction layer to use memory mapped files for IPC purposes.
+
+	^^
+*/
+
+#include <stdint.h>
+
+#ifndef _H_KAJI_FRAGMENT_H_
+#define _H_KAJI_FRAGMENT_H_
+
+struct kaji;
+
+struct kaji_fragment {
+	void* data;
+	uint64_t offset;
+	uint64_t size;
+};
+typedef
+	struct kaji_fragment
+	kaji_fragment_t
+	;
+
+uint64_t
+kaji_fragment_page(const struct kaji_fragment* fragment);
+
+uint8_t
+kaji_fragment_find(struct kaji* ctx, struct kaji_fragment* f, const void* data);
+
+void*
+kaji_fragment_marshall(struct kaji* ctx, struct kaji_fragment* fragment);
+
+int
+kaji_fragment_sync(struct kaji* ctx, const struct kaji_fragment* fragment, uint8_t block);
+
+#endif

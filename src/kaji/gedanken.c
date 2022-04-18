@@ -15,7 +15,7 @@
 
 #include <tempora/all.h>
 #include <kaji/gedanken.h>
-#include <kaji/kaji.h>
+#include <kaji/all.h>
 
 #ifdef USE_GEDANKEN
 static kaji_t* g_kaji = NULL;
@@ -55,7 +55,7 @@ void free(void* memory) {
 	}
 	else {
 		printf("Freeing memory using SYSTEM ...\n");
-		system_free(memory);		
+		system_free(memory);
 	}
 }
 
@@ -119,7 +119,7 @@ void gedanken_shutdown() {
 	printf("Shutting down gedanken ...\n");
 	if (0 != kaji_release(g_kaji)) {
 		fprintf(stderr, "Error releasing kaji :/ (errno: %i, %s)\n"
-			, errno, strerror(errno));		
+			, errno, strerror(errno));
 	}
 
 	printf("Dematerializing ...\n");

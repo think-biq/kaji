@@ -15,7 +15,7 @@
 
 #include <tempora/all.h>
 #include <spirits/all.h>
-#include <kaji/kaji.h>
+#include <kaji/all.h>
 #include <kaji/gedanken.h>
 
 int main () {

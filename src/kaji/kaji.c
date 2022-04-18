@@ -23,7 +23,7 @@
 
 #include <spirits/all.h>
 
-#include <kaji/kaji.h>
+#include <kaji/all.h>
 
 #ifdef _WIN32
 #define KAJI_PATH_SIZE 256
@@ -36,7 +36,6 @@
 struct kaji {
 	uint8_t* memory;
 	char path[KAJI_PATH_SIZE];
-	int32_t file_descriptor;
 	uint64_t size;
 	spirits_t spirits;
 };
@@ -76,7 +75,7 @@ kaji_print_spirits(kaji_t* ctx) {
 		printf("No spirits materialized.\n");
 		return;
 	}
-	spirits_print_all(&(ctx->spirits));	
+	spirits_print_all(&(ctx->spirits));
 }
 
 kaji_t*
@@ -120,8 +119,8 @@ kaji_bind(kaji_t* ctx, const char* path, uint64_t size) {
 		strncpy(ctx->path, path, KAJI_PATH_SIZE);
 	}
 
-	ctx->file_descriptor = open(path, O_RDWR | O_CREAT, 0666);
-	if (0 > ctx->file_descriptor) {
+	int32_t file_descriptor = open(path, O_RDWR | O_CREAT, 0666);
+	if (0 > file_descriptor) {
 		errno = ENOENT;
 		return 3;
 	}
@@ -129,7 +128,7 @@ kaji_bind(kaji_t* ctx, const char* path, uint64_t size) {
 	struct stat fs;
 	stat(ctx->path, &fs);
 	if (fs.st_size < size) {
-		close(ctx->file_descriptor);
+		close(file_descriptor);
 		errno = ENOMEM;
 		return 4;
 	}
@@ -139,16 +138,15 @@ kaji_bind(kaji_t* ctx, const char* path, uint64_t size) {
 		, size
 		, PROT_READ | PROT_WRITE
 		, MAP_SHARED
-		, ctx->file_descriptor
+		, file_descriptor
 		, 0
 	);
+	close(file_descriptor);
 	if(MAP_FAILED == ctx->memory) {
-		close(ctx->file_descriptor);
 		ctx->memory = NULL;
 		return 5;
 	}
 	ctx->size = size;
-	close(ctx->file_descriptor);
 
 	ctx->spirits.offset = 0;
 	ctx->spirits.size = ctx->size;
@@ -163,8 +161,7 @@ uint8_t
 kaji_release(kaji_t* ctx) {
 	if (NULL == ctx) return 64;
 
-	int err = munmap(ctx->memory, ctx->size);	
-	/*close(ctx->file_descriptor);*/
+	int err = munmap(ctx->memory, ctx->size);
 	return err;
 }
 
@@ -206,23 +203,49 @@ kaji_allocate(kaji_t* ctx, uint64_t size) {
 		return NULL;
 	}
 
-	kaji_fragment_t spirit_fragment = {
+	kaji_fragment_t f = {
 		.offset = offset,
 		.size = size
 	};
-	if (NULL == kaji_fragment_marshall(ctx, &spirit_fragment)) {
+	if (NULL == kaji_fragment_marshall(ctx, &f)) {
 		fprintf(stderr, "Could not marhal second fragment :/\n");
 		return NULL;
 	}
 	printf("Allocated fragment of size %llu at %llu.\n", size, offset);
 
-	return spirit_fragment.data;
+	return f.data;
+}
+
+void
+kaji_free(kaji_t* ctx, void* data) {
+	kaji_fragment_t f;
+	if (0 == kaji_fragment_find(ctx, &f, data)) {
+		spirits_free(&(ctx->spirits), f.offset);
+	}
+	else {
+		printf("Could not find fragment for data :/\n");
+	}
+}
+
+void*
+kaji_marshall(kaji_t* ctx, uint64_t offset, uint64_t size) {
+	if (NULL == ctx || NULL == ctx->memory) {
+		fprintf(stderr, "Context invalid!\n");
+		return NULL;
+	}
+
+	if (ctx->size < (offset + size)) {
+		fprintf(stderr, "Memory range outside of mapped file bounds!\n");
+		return NULL;
+	}
+
+	return (void*)(ctx->memory + offset);
 }
 
 uint64_t
-kaji_fragment_page(const kaji_fragment_t* fragment) {
+kaji_fragment_page(const kaji_fragment_t* f) {
 	return (uint64_t)floor(
-		fragment->offset / (uint64_t)KAJI_PAGE_SIZE
+		f->offset / (uint64_t)KAJI_PAGE_SIZE
 	);
 }
 
@@ -245,39 +268,28 @@ kaji_fragment_find(kaji_t* ctx, kaji_fragment_t* f, const void* data) {
 	return 1;
 }
 
-void
-kaji_free(kaji_t* ctx, void* data) {
-	kaji_fragment_t f;
-	if (0 == kaji_fragment_find(ctx, &f, data)) {
-		spirits_free(&(ctx->spirits), f.offset);		
-	}
-	else {
-		printf("Could not find fragment for data :/\n");
-	}
+void*
+kaji_fragment_marshall(kaji_t* ctx, kaji_fragment_t* f) {
+	if (NULL == f) return NULL;
+
+	f->data = kaji_marshall(ctx, f->offset, f->size);
+
+	return f->data;
 }
 
-void*
-kaji_marshall(kaji_t* ctx, uint64_t offset, uint64_t size) {
-	if (NULL == ctx || NULL == ctx->memory) {
-		fprintf(stderr, "Context invalid!\n");
-		return NULL;
-	}
+int
+kaji_fragment_sync(kaji_t* ctx, const kaji_fragment_t* f, uint8_t block) {
+	uint64_t page = kaji_fragment_page(f);
+	uint64_t page_start_offset = 0 < page
+		? page * KAJI_PAGE_SIZE - 1
+		: 0
+		;
+	void* page_address = ctx->memory + page_start_offset;
+	uint64_t size_padding = f->offset - page_start_offset;
+	size_t size = f->size + size_padding;
+	int flags = block ? MS_SYNC : MS_ASYNC;
 
-	if (ctx->size < (offset + size)) {
-		fprintf(stderr, "Memory range outside of mapped file bounds!\n");
-		return NULL;
-	}
-
-	return (void*)(ctx->memory + offset);
-}
-
-void*
-kaji_fragment_marshall(kaji_t* ctx, kaji_fragment_t* fragment) {
-	if (NULL == fragment) return NULL;
-
-	fragment->data = kaji_marshall(ctx, fragment->offset, fragment->size);
-
-	return fragment->data;
+	return msync(page_address, size, flags);
 }
 
 void*
@@ -295,21 +307,6 @@ kaji_spell(kaji_t* ctx, uint64_t offset, const uint8_t * const data, uint64_t si
 int
 kaji_sync(kaji_t* ctx, uint8_t block) {
 	return msync(ctx->memory, ctx->size, block ? MS_SYNC : MS_ASYNC);
-}
-
-int
-kaji_sync_fragment(kaji_t* ctx, const kaji_fragment_t* fragment, uint8_t block) {
-	uint64_t page = kaji_fragment_page(fragment);
-	uint64_t page_start_offset = 0 < page
-		? page * KAJI_PAGE_SIZE - 1
-		: 0
-		;
-	void* page_address = ctx->memory + page_start_offset;
-	uint64_t size_padding = fragment->offset - page_start_offset;	
-	size_t size = fragment->size + size_padding;
-	int flags = block ? MS_SYNC : MS_ASYNC;
-
-	return msync(page_address, size, flags);
 }
 
 const char*

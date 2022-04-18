@@ -13,7 +13,7 @@
 
 #include <tempora/all.h>
 #include <spirits/all.h>
-#include <kaji/kaji.h>
+#include <kaji/all.h>
 
 static uint8_t keep_running = 1;
 void
@@ -208,13 +208,13 @@ treat_memory(int mode, kaji_t* kaji) {
 			++(memory->timing);
 			// Since we have access to the fragment, we instruct kaji to only
 			// sync the pages holding the fragment's data.
-			if (0 != kaji_sync_fragment(kaji, &one, 1)) {
+			if (0 != kaji_fragment_sync(kaji, &one, 1)) {
 				printf("Error syncing ONE: errno(%i): %s\n"
 					, errno, strerror(errno));
 			}
 
 			other_memory->timing = memory->timing + 10;
-			if (0 != kaji_sync_fragment(kaji, &two, 1)) {
+			if (0 != kaji_fragment_sync(kaji, &two, 1)) {
 				printf("Error syncing TWO: errno(%i): %s\n"
 					, errno, strerror(errno));
 			}
