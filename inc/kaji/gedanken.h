@@ -35,7 +35,7 @@ void gedanken_shutdown();
 #warning "Disabling gedanken. Using stubs for API calls!"
 
 #define gedanken_initialize(...) 1
-#define gedanken_kaji() 0
+#define gedanken_kaji() NULL
 #define gedanken_is_activated() 0
 #define gedanken_activate(...) {}
 #define gedanken_shutdown(...) {}

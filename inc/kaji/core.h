@@ -11,18 +11,31 @@
 #ifndef _H_KAJI_CORE_H_
 #define _H_KAJI_CORE_H_
 
+/**
+ * @brief      Context structure for kaji operations.
+ */
 struct kaji;
+/**
+ * @brief      Convenience typedef for context structure.
+ */
 typedef
 	struct kaji
 	kaji_t
 	;
 
-const char*
-kaji_path(kaji_t* ctx);
-
+/**
+ * @brief      Create new instance of a kaji system and return a context object.
+ *
+ * @return     Pointer to the newly created context object.
+ */
 kaji_t*
 kaji_materialize();
 
+/**
+ * @brief      Delets given kaji instance.
+ *
+ * @param      ctx   Pointer to the kaji context object.
+ */
 void
 kaji_dematerialize(kaji_t* ctx);
 

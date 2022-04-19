@@ -26,6 +26,15 @@ typedef
 uint64_t
 kaji_fragment_page(const struct kaji_fragment* fragment);
 
+/**
+ * @brief      Find fragment information for given memory pointer.
+ *
+ * @param      ctx   Kaji context.
+ * @param      f     Fragment to hold the resulting information.
+ * @param[in]  data  Memory pointer to analyse.
+ *
+ * @return     0 if fragment has been found. 0 < otherwise.
+ */
 uint8_t
 kaji_fragment_find(struct kaji* ctx, struct kaji_fragment* f, const void* data);
 
