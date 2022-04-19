@@ -116,10 +116,9 @@ _kaji_file_write_zeroes_f(FILE* f, uint64_t size) {
 
 	uint64_t cycles = size / chunk_size;
 	uint64_t rest = cycles % chunk_size;
-	uint64_t written = 0, total = 0;
 	// Write int 64bit chunks.
 	for (uint64_t i = 0; i < cycles; ++i) {
-		written = fwrite(&default_data, chunk_size, 1, f);
+		fwrite(&default_data, chunk_size, 1, f);
 		if (0 != errno) {
 			KAJI_LOG("(errno: %i, %s)\n", errno, strerror(errno));
 			return 1;
@@ -127,7 +126,7 @@ _kaji_file_write_zeroes_f(FILE* f, uint64_t size) {
 	}
 	// And append the rest in individual bytes.
 	for (uint64_t i = 0; i < rest; ++i) {
-		written = fwrite(&default_data, 1, 1, f);
+		fwrite(&default_data, 1, 1, f);
 		if (0 != errno) {
 			KAJI_LOG("(errno: %i, %s)\n", errno, strerror(errno));
 			return 1;
@@ -175,7 +174,7 @@ kaji_file_expand(const char* path, uint64_t size) {
 	// Seek to the end.
 	fseek(f, 0, SEEK_END);
 	long current_size = ftell(f);
-	if (0 > size) {
+	if (0 > current_size) {
 		return 2;
 	}
 
