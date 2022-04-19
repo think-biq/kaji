@@ -37,6 +37,7 @@ int main () {
 		printf("Using %s as virtually mapped memory ...\n", path);
 		kaji_print_spirits(kaji);
 
+		// Uses kaji + spirits memory allocator in the background.
 		char* keks = malloc(sizeof(char) * 900);
 		if (NULL != keks) {
 			kaji_print_spirits(kaji);
@@ -60,6 +61,7 @@ int main () {
 	gedanken_activate(0);
 	printf("Without gedanken ...\n");
 	{
+		// Uses system defaut memory allocator.
 		char* keks = malloc(sizeof(char) * 900);
 		if (NULL != keks) {
 			printf("Copying peom ...\n");
