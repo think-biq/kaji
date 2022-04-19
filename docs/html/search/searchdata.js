@@ -2,7 +2,7 @@ var indexSectionsWithContent =
 {
   0: "abcfgkmp",
   1: "k",
-  2: "abcfgmp",
+  2: "abcfgkmp",
   3: "k",
   4: "k"
 };
