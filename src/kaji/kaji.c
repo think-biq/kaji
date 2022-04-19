@@ -441,10 +441,15 @@ kaji_fragment_sync(kaji_t* ctx, const kaji_fragment_t* f, uint8_t block) {
 
 void*
 kaji_spell(kaji_t* ctx, uint64_t offset, const uint8_t * const data, uint64_t size) {
-	if (NULL == ctx || NULL == data) return NULL;
+	if (NULL == ctx || NULL == data) {
+		errno = EINVAL;
+		return NULL;
+	}
 
 	uint8_t* start_addr = ctx->memory + offset;
 	if (ctx->size < (offset + size)) {
+		KAJI_LOG("Memory range outside of mapped file bounds!\n");
+		errno = ENOMEM;
 		return NULL;
 	}
 
