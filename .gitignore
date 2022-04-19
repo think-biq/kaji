@@ -1,2 +1,5 @@
 .DS_Store
 staging
+docs/html
+docs/latex
+docs/*.log
