@@ -13,16 +13,30 @@
 
 struct kaji;
 
+/**
+ * @brief      Represents a marshalled memory fragment.
+ */
 struct kaji_fragment {
 	void* data;
 	uint64_t offset;
 	uint64_t size;
 };
+/**
+ * Convenice typedef for kaji_fragment.
+ * @see struct kaji_fragment
+ */
 typedef
 	struct kaji_fragment
 	kaji_fragment_t
 	;
 
+/**
+ * @brief      Gets memory page this fragment is starting in.
+ *
+ * @param[in]  fragment  The fragment
+ *
+ * @return     Memory page index.
+ */
 uint64_t
 kaji_fragment_page(const struct kaji_fragment* fragment);
 
@@ -38,9 +52,26 @@ kaji_fragment_page(const struct kaji_fragment* fragment);
 uint8_t
 kaji_fragment_find(struct kaji* ctx, struct kaji_fragment* f, const void* data);
 
+/**
+ * @brief      Marshalls a given memory range.
+ * 
+ * @param      ctx       The context
+ * @param      fragment  The fragment
+ *
+ * @return     Pointer to the memory range if successful. NULL otherwise.
+ */
 void*
 kaji_fragment_marshall(struct kaji* ctx, struct kaji_fragment* fragment);
 
+/**
+ * @brief      Instructs kaji to make sure that given fragment is synced.
+ *
+ * @param      ctx       The context
+ * @param[in]  fragment  The fragment
+ * @param[in]  block     The block
+ *
+ * @return     0 on success. 0 < otherwise.
+ */
 int
 kaji_fragment_sync(struct kaji* ctx, const struct kaji_fragment* fragment, uint8_t block);
 
