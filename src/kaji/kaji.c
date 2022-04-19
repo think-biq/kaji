@@ -96,8 +96,15 @@ kaji_dematerialize(kaji_t* ctx) {
 
 const char*
 kaji_path(kaji_t* ctx) {
-	if (NULL == ctx) return NULL;
-	return ctx->path;
+	if (NULL == ctx) {
+		errno = EINVAL;
+		return NULL;
+	}
+
+	return '\0' == ctx->path[0]
+		? NULL
+		: ctx->path
+		;
 }
 
 uint8_t
@@ -159,9 +166,17 @@ kaji_bind(kaji_t* ctx, const char* path, uint64_t size) {
 
 uint8_t
 kaji_release(kaji_t* ctx) {
-	if (NULL == ctx) return 64;
+	if (NULL == ctx) {
+		errno = EINVAL;
+		return 1;
+	}
 
 	int err = munmap(ctx->memory, ctx->size);
+	ctx->memory = NULL;
+	ctx->size = 0;
+	ctx->path[0] = '\0';
+	spirits_banish(&(ctx->spirits));
+
 	return err;
 }
 
