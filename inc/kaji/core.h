@@ -6,10 +6,10 @@
 	^^
 */
 
-#include <stdint.h>
-
 #ifndef _H_KAJI_CORE_H_
 #define _H_KAJI_CORE_H_
+
+#include <stdint.h>
 
 /**
  * @brief      Context structure for kaji operations.
@@ -28,7 +28,7 @@ typedef
  *
  * @return     Pointer to the newly created context object.
  */
-kaji_t*
+struct kaji*
 kaji_materialize();
 
 /**
@@ -37,6 +37,6 @@ kaji_materialize();
  * @param      ctx   Pointer to the kaji context object.
  */
 void
-kaji_dematerialize(kaji_t* ctx);
+kaji_dematerialize(struct kaji* ctx);
 
 #endif

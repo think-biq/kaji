@@ -11,6 +11,11 @@
 
 struct kaji;
 
+/**
+ * @brief      Prints the current kaji spirit layout.
+ *
+ * @param      ctx   Pointer to the kaji context object.
+ */
 void
 kaji_print_spirits(struct kaji* ctx);
 

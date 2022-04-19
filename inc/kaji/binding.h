@@ -6,10 +6,10 @@
 	^^
 */
 
-#include <stdint.h>
-
 #ifndef _H_KAJI_COMMON_H_
 #define _H_KAJI_COMMON_H_
+
+#include <stdint.h>
 
 struct kaji;
 

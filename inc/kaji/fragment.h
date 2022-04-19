@@ -6,10 +6,10 @@
 	^^
 */
 
-#include <stdint.h>
-
 #ifndef _H_KAJI_FRAGMENT_H_
 #define _H_KAJI_FRAGMENT_H_
+
+#include <stdint.h>
 
 struct kaji;
 
@@ -17,10 +17,11 @@ struct kaji;
  * @brief      Represents a marshalled memory fragment.
  */
 struct kaji_fragment {
-	void* data;
-	uint64_t offset;
-	uint64_t size;
+	void* data; /**< Pointer to the memory represented by this fragment. */
+	uint64_t offset; /**< Distance from start of the virtual memory in bytes. */
+	uint64_t size; /**< Size of this fragments in bytes. */
 };
+
 /**
  * Convenice typedef for kaji_fragment.
  * @see struct kaji_fragment

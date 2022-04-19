@@ -6,10 +6,10 @@
 	^^
 */
 
-#include <stdint.h>
-
 #ifndef _H_KAJI_FILE_H_
 #define _H_KAJI_FILE_H_
+
+#include <stdint.h>
 
 /**
  * @brief      Creates an IPC file at path with at least size.
