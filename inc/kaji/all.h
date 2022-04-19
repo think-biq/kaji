@@ -10,4 +10,6 @@
 #include "memory.h"
 #include "binding.h"
 #include "fragment.h"
+#include "file.h"
 #include "print.h"
+#include "log.h"

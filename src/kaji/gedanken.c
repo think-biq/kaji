@@ -60,7 +60,7 @@ void free(void* memory) {
 }
 
 int gedanken_initialize(uint64_t head_size, const char* filename) {
-	fprintf(stderr, "Fetching system memory functions ...\n");
+	KAJI_LOG("Fetching system memory functions ...\n");
     system_malloc = dlsym(RTLD_NEXT, "malloc");
     system_free = dlsym(RTLD_NEXT, "free");
 
@@ -78,20 +78,24 @@ int gedanken_initialize(uint64_t head_size, const char* filename) {
 
 	g_kaji = kaji_materialize();
 	if (NULL == g_kaji) {
-		fprintf(stderr, "Could not materialize kaji ...\n");
+		KAJI_LOG("Could not materialize kaji ...\n");
 		return 1;
 	}
-	fprintf(stderr, "Binding ...\n");
+	KAJI_LOG("Binding ...\n");
 	while (0 != kaji_bind(g_kaji, tmppath, head_size)) {
-		fprintf(stderr, "Error binding :/ (errno: %i, %s)\n"
+		KAJI_LOG("Error binding :/ (errno: %i, %s)\n"
 			, errno, strerror(errno));
-		if (ENOMEM == errno) {
-			fprintf(stderr, "Resizing / filling ...\n");
-			kaji_zero(tmppath, head_size);
-			fprintf(stderr, "Retrying binding ...\n");
-		}
-		else {
-			return 13;
+		switch(errno) {
+			case ENOMEM:
+				KAJI_LOG("Resizing / filling ...\n");
+				kaji_file_expand(tmppath, head_size);
+			break;
+			case ENOENT:
+				KAJI_LOG("Creating new temp file ...\n");
+				kaji_file_create(tmppath, head_size);
+			break;
+			default:
+				return 13;
 		}
 	}
 

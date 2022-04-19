@@ -31,10 +31,4 @@ kaji_sync(struct kaji* ctx, uint8_t block);
 const char*
 kaji_sync_error(int error_code);
 
-uint8_t
-kaji_zero(const char* path, uint64_t size);
-
-void
-kaji_blank(struct kaji* ctx);
-
 #endif

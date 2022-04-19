@@ -44,6 +44,7 @@ typedef
 	kaji_t
 	;
 
+static uint8_t g_kaij_log_activated = 0;
 static uint8_t g_system_functions_initialized = 0;
 static void* (*system_malloc)(size_t) = NULL;
 static void* (*system_free)(void*) = NULL;
@@ -76,6 +77,156 @@ kaji_print_spirits(kaji_t* ctx) {
 		return;
 	}
 	spirits_print_all(&(ctx->spirits));
+}
+
+uint8_t
+kaji_log_active() {
+	return g_kaij_log_activated;
+}
+
+void
+kaji_log_activate() {
+	g_kaij_log_activated = 1;
+}
+
+void
+kaji_log_deactivate() {
+	g_kaij_log_activated = 0;
+}
+
+void
+_kaji_file_write_zeroes(int fd, uint64_t size) {
+	static const uint64_t default_data = 0;
+	static const uint64_t chunk_size = sizeof default_data;
+
+	uint64_t cycles = size / chunk_size;
+	uint64_t rest = cycles % chunk_size;
+	for (uint64_t i = 0; i < cycles; ++i) {
+		write(fd, &default_data, sizeof default_data);
+	}
+	write(fd, &default_data, rest);
+}
+
+uint8_t
+_kaji_file_write_zeroes_f(FILE* f, uint64_t size) {
+	static const uint64_t default_data = 0;
+	static const uint64_t chunk_size = sizeof default_data;
+
+	errno = 0;
+
+	uint64_t cycles = size / chunk_size;
+	uint64_t rest = cycles % chunk_size;
+	uint64_t written = 0, total = 0;
+	// Write int 64bit chunks.
+	for (uint64_t i = 0; i < cycles; ++i) {
+		written = fwrite(&default_data, chunk_size, 1, f);
+		if (0 != errno) {
+			KAJI_LOG("(errno: %i, %s)\n", errno, strerror(errno));
+			return 1;
+		}
+	}
+	// And append the rest in individual bytes.
+	for (uint64_t i = 0; i < rest; ++i) {
+		written = fwrite(&default_data, 1, 1, f);
+		if (0 != errno) {
+			KAJI_LOG("(errno: %i, %s)\n", errno, strerror(errno));
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+uint8_t
+kaji_file_create(const char* path, uint64_t size) {
+	int fd = open(path, O_RDWR | O_CREAT, 0666);
+	if (0 > fd) {
+		return 3;
+	}
+
+	_kaji_file_write_zeroes(fd, size);
+
+	close(fd);
+
+	return 0;
+}
+
+uint8_t
+kaji_file_expand(const char* path, uint64_t size) {
+	// From: https://man7.org/linux/man-pages/man2/open.2.html
+	// O_APPEND may lead to corrupted files on NFS filesystems if
+	// more than one process appends data to a file at once.
+	// This is because NFS does not support appending to a file,
+	// so the client kernel has to simulate it, which can't be
+	// done without a race condition.
+	
+	// That's why we open it as read/write.
+	//int fd = open(path, O_RDWR | O_APPEND, 0666);
+	//if (0 > fd) {
+	//	return 1;
+	//}
+
+	// Well here we go regardless.
+	FILE* f = fopen(path, "ab+");
+	if (NULL == f) {
+		return 1;
+	}
+
+	// Seek to the end.
+	fseek(f, 0, SEEK_END);
+	long current_size = ftell(f);
+	if (0 > size) {
+		return 2;
+	}
+
+	// And if necessary,
+	if (size <= (uint64_t)current_size) return 0;
+
+	// just keep writing the missing bytes.
+	uint64_t expansion = size - (uint64_t)current_size;
+	KAJI_LOG("Expanding file with %u bytes from %u to %u ...\n"
+		, expansion
+		, (uint64_t)current_size
+		, size
+	);
+
+	if (0 != _kaji_file_write_zeroes_f(f, expansion)) {
+		return 3;
+	}
+
+	KAJI_LOG("Closing file ...\n");
+	fclose(f);
+	//close(fd);
+
+	return 0;
+}
+
+uint8_t
+kaji_file_zero(const char* path) {
+	int fd = open(path, O_RDWR, 0666);
+	if (0 > fd) {
+		return 1;
+	}
+
+	//
+	FILE* f = fdopen(fd, "wb+");
+	if (NULL == f) {
+		return 1;
+	}
+
+	//
+	fseek(f, 0, SEEK_END);
+	long size = ftell(f);
+	if (0 > size) {
+		return 2;
+	}
+
+	fseek(f, 0, SEEK_SET);
+	_kaji_file_write_zeroes_f(f, (uint64_t)size);
+
+	close(fd);
+
+	return 0;
 }
 
 kaji_t*
@@ -126,15 +277,19 @@ kaji_bind(kaji_t* ctx, const char* path, uint64_t size) {
 		strncpy(ctx->path, path, KAJI_PATH_SIZE);
 	}
 
-	int32_t file_descriptor = open(path, O_RDWR | O_CREAT, 0666);
+	int32_t file_descriptor = open(path, O_RDWR /*| O_CREAT*/, 0666);
 	if (0 > file_descriptor) {
-		errno = ENOENT;
+		//errno = ENOENT;
 		return 3;
 	}
 
 	struct stat fs;
 	stat(ctx->path, &fs);
 	if (fs.st_size < size) {
+		KAJI_LOG("File appears to be %u in size, yet needs to be %u ...\n"
+			, fs.st_size
+			, size
+		);
 		close(file_descriptor);
 		errno = ENOMEM;
 		return 4;
@@ -180,41 +335,14 @@ kaji_release(kaji_t* ctx) {
 	return err;
 }
 
-void
-kaji_blank(kaji_t* ctx) {
-	kaji_zero(ctx->path, ctx->size);
-}
-
-uint8_t
-kaji_zero(const char* path, uint64_t size) {
-	static const uint64_t default_data = 0;
-	static const uint64_t chunk_size = sizeof default_data;
-
-	int fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0666);
-	if (0 > fd) {
-		return 3;
-	}
-
-	uint64_t cycles = size / chunk_size;
-	uint64_t rest = cycles % chunk_size;
-	for (uint64_t i = 0; i < cycles; ++i) {
-		write(fd, &default_data, sizeof default_data);
-	}
-	write(fd, &default_data, rest);
-
-	close(fd);
-
-	return 0;
-}
-
 void*
 kaji_allocate(kaji_t* ctx, uint64_t size) {
 	uint64_t offset = 0;
 	if (0 == spirits_allocate(&(ctx->spirits), &offset, size)) {
-		printf("Allocated %llu bytes of memory at offset: %llu\n", size, offset);
+		KAJI_LOG("Allocated %llu bytes of memory at offset: %llu\n", size, offset);
 	}
 	else {
-		printf("Allocation error :/\n");
+		KAJI_LOG("Allocation error :/\n");
 		return NULL;
 	}
 
@@ -223,10 +351,10 @@ kaji_allocate(kaji_t* ctx, uint64_t size) {
 		.size = size
 	};
 	if (NULL == kaji_fragment_marshall(ctx, &f)) {
-		fprintf(stderr, "Could not marhal second fragment :/\n");
+		KAJI_LOG("Could not marshall second fragment :/\n");
 		return NULL;
 	}
-	printf("Allocated fragment of size %llu at %llu.\n", size, offset);
+	KAJI_LOG("Allocated fragment of size %llu at %llu.\n", size, offset);
 
 	return f.data;
 }
@@ -238,19 +366,21 @@ kaji_free(kaji_t* ctx, void* data) {
 		spirits_free(&(ctx->spirits), f.offset);
 	}
 	else {
-		printf("Could not find fragment for data :/\n");
+		KAJI_LOG("Could not find fragment for data :/\n");
 	}
 }
 
 void*
 kaji_marshall(kaji_t* ctx, uint64_t offset, uint64_t size) {
 	if (NULL == ctx || NULL == ctx->memory) {
-		fprintf(stderr, "Context invalid!\n");
+		KAJI_LOG("Context invalid!\n");
+		errno = EINVAL;
 		return NULL;
 	}
 
 	if (ctx->size < (offset + size)) {
-		fprintf(stderr, "Memory range outside of mapped file bounds!\n");
+		KAJI_LOG("Memory range outside of mapped file bounds!\n");
+		errno = ENOMEM;
 		return NULL;
 	}
 
@@ -285,7 +415,10 @@ kaji_fragment_find(kaji_t* ctx, kaji_fragment_t* f, const void* data) {
 
 void*
 kaji_fragment_marshall(kaji_t* ctx, kaji_fragment_t* f) {
-	if (NULL == f) return NULL;
+	if (NULL == f) {
+		errno = EINVAL;
+		return NULL;
+	}
 
 	f->data = kaji_marshall(ctx, f->offset, f->size);
 
