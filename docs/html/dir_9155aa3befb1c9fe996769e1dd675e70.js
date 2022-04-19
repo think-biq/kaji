@@ -6,7 +6,7 @@ var dir_9155aa3befb1c9fe996769e1dd675e70 =
     [ "file.h", "file_8h.html", "file_8h" ],
     [ "fragment.h", "fragment_8h.html", "fragment_8h" ],
     [ "gedanken.h", "gedanken_8h.html", null ],
-    [ "log.h", "log_8h_source.html", null ],
-    [ "memory.h", "memory_8h.html", null ],
-    [ "print.h", "print_8h.html", null ]
+    [ "log.h", "log_8h.html", "log_8h" ],
+    [ "memory.h", "memory_8h.html", "memory_8h" ],
+    [ "print.h", "print_8h.html", "print_8h" ]
 ];

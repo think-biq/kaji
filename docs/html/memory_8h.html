@@ -98,29 +98,271 @@ $(document).ready(function(){initNavTree('memory_8h.html',''); initResizable(); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7d2e40394ab52f2d7d1cb97249d69d66"><td class="memItemLeft" align="right" valign="top"><a id="a7d2e40394ab52f2d7d1cb97249d69d66" name="a7d2e40394ab52f2d7d1cb97249d69d66"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_allocate</b> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint64_t size)</td></tr>
+<tr class="memitem:a7d2e40394ab52f2d7d1cb97249d69d66"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#a7d2e40394ab52f2d7d1cb97249d69d66">kaji_allocate</a> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint64_t size)</td></tr>
+<tr class="memdesc:a7d2e40394ab52f2d7d1cb97249d69d66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates the requested memory and keeps track of it.  <a href="memory_8h.html#a7d2e40394ab52f2d7d1cb97249d69d66">More...</a><br /></td></tr>
 <tr class="separator:a7d2e40394ab52f2d7d1cb97249d69d66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a007abe7a8c10a275fde42273b967f3bc"><td class="memItemLeft" align="right" valign="top"><a id="a007abe7a8c10a275fde42273b967f3bc" name="a007abe7a8c10a275fde42273b967f3bc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_free</b> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, void *data)</td></tr>
+<tr class="memitem:a007abe7a8c10a275fde42273b967f3bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#a007abe7a8c10a275fde42273b967f3bc">kaji_free</a> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, void *data)</td></tr>
+<tr class="memdesc:a007abe7a8c10a275fde42273b967f3bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees allocated memory block starting at given memory.  <a href="memory_8h.html#a007abe7a8c10a275fde42273b967f3bc">More...</a><br /></td></tr>
 <tr class="separator:a007abe7a8c10a275fde42273b967f3bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40ae9a5c428a8ed1488f2788b7b865cc"><td class="memItemLeft" align="right" valign="top"><a id="a40ae9a5c428a8ed1488f2788b7b865cc" name="a40ae9a5c428a8ed1488f2788b7b865cc"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_marshall</b> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint64_t start, uint64_t size)</td></tr>
-<tr class="separator:a40ae9a5c428a8ed1488f2788b7b865cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9fe668819816c7ce88dc34e397a503a"><td class="memItemLeft" align="right" valign="top"><a id="ad9fe668819816c7ce88dc34e397a503a" name="ad9fe668819816c7ce88dc34e397a503a"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_spell</b> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint64_t offset, const uint8_t *const data, uint64_t size)</td></tr>
+<tr class="memitem:ad89dd9221954905c12248ef9242a2328"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#ad89dd9221954905c12248ef9242a2328">kaji_marshall</a> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint64_t offset, uint64_t size)</td></tr>
+<tr class="memdesc:ad89dd9221954905c12248ef9242a2328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives access to a block of memory, without allocating it.  <a href="memory_8h.html#ad89dd9221954905c12248ef9242a2328">More...</a><br /></td></tr>
+<tr class="separator:ad89dd9221954905c12248ef9242a2328"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9fe668819816c7ce88dc34e397a503a"><td class="memItemLeft" align="right" valign="top">void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#ad9fe668819816c7ce88dc34e397a503a">kaji_spell</a> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint64_t offset, const uint8_t *const data, uint64_t size)</td></tr>
+<tr class="memdesc:ad9fe668819816c7ce88dc34e397a503a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies given data to kaji memory.  <a href="memory_8h.html#ad9fe668819816c7ce88dc34e397a503a">More...</a><br /></td></tr>
 <tr class="separator:ad9fe668819816c7ce88dc34e397a503a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b5fe96e6c9b32cb1692eb0e9db6df10"><td class="memItemLeft" align="right" valign="top"><a id="a1b5fe96e6c9b32cb1692eb0e9db6df10" name="a1b5fe96e6c9b32cb1692eb0e9db6df10"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_sync</b> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint8_t block)</td></tr>
+<tr class="memitem:a1b5fe96e6c9b32cb1692eb0e9db6df10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#a1b5fe96e6c9b32cb1692eb0e9db6df10">kaji_sync</a> (struct <a class="el" href="structkaji.html">kaji</a> *ctx, uint8_t block)</td></tr>
+<tr class="memdesc:a1b5fe96e6c9b32cb1692eb0e9db6df10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instructs kaji to make sure all memory changes are persisted.  <a href="memory_8h.html#a1b5fe96e6c9b32cb1692eb0e9db6df10">More...</a><br /></td></tr>
 <tr class="separator:a1b5fe96e6c9b32cb1692eb0e9db6df10"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc8a8c7f17327db240117eb140bc299a"><td class="memItemLeft" align="right" valign="top"><a id="acc8a8c7f17327db240117eb140bc299a" name="acc8a8c7f17327db240117eb140bc299a"></a>
-const char *&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_sync_error</b> (int error_code)</td></tr>
+<tr class="memitem:acc8a8c7f17327db240117eb140bc299a"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="memory_8h.html#acc8a8c7f17327db240117eb140bc299a">kaji_sync_error</a> (int error_code)</td></tr>
+<tr class="memdesc:acc8a8c7f17327db240117eb140bc299a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a readable string based on given error code.  <a href="memory_8h.html#acc8a8c7f17327db240117eb140bc299a">More...</a><br /></td></tr>
 <tr class="separator:acc8a8c7f17327db240117eb140bc299a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Abstraction layer to use memory mapped files for IPC purposes. </p>
 <p >^^ </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a7d2e40394ab52f2d7d1cb97249d69d66" name="a7d2e40394ab52f2d7d1cb97249d69d66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d2e40394ab52f2d7d1cb97249d69d66">&#9670;&nbsp;</a></span>kaji_allocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * kaji_allocate </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structkaji.html">kaji</a> *&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Allocates the requested memory and keeps track of it. </p>
+<p >If NULL is returned, check errno for details on what went wrong.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">ctx</td><td>Pointer to the kaji context object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>Size of the memory to be allocated.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the allocated memory or NULL if something went wrong. </dd></dl>
+
+</div>
+</div>
+<a id="a007abe7a8c10a275fde42273b967f3bc" name="a007abe7a8c10a275fde42273b967f3bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a007abe7a8c10a275fde42273b967f3bc">&#9670;&nbsp;</a></span>kaji_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void kaji_free </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structkaji.html">kaji</a> *&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>data</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Frees allocated memory block starting at given memory. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ctx</td><td>Pointer to the kaji context object. </td></tr>
+    <tr><td class="paramname">data</td><td>Pointer to block of memory. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ad89dd9221954905c12248ef9242a2328" name="ad89dd9221954905c12248ef9242a2328"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad89dd9221954905c12248ef9242a2328">&#9670;&nbsp;</a></span>kaji_marshall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * kaji_marshall </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structkaji.html">kaji</a> *&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gives access to a block of memory, without allocating it. </p>
+<p >Will set errno if something went wrong.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">ctx</td><td>Pointer to the kaji context object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>Number of bytes from the start of kaji virtual memory. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>Number of bytes to be accessed.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the marshalled memory or NULL if something went wrong. </dd></dl>
+
+</div>
+</div>
+<a id="ad9fe668819816c7ce88dc34e397a503a" name="ad9fe668819816c7ce88dc34e397a503a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9fe668819816c7ce88dc34e397a503a">&#9670;&nbsp;</a></span>kaji_spell()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void * kaji_spell </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structkaji.html">kaji</a> *&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *const&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copies given data to kaji memory. </p>
+<p >Will set errno if something went wrong.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">ctx</td><td>Pointer to the kaji context object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">offset</td><td>Number of bytes from the start of kaji virtual memory. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">data</td><td>Pointer to the data to be copied. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>Number of bytes to be copied.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to the copied memory or NULL if something went wrong. </dd></dl>
+
+</div>
+</div>
+<a id="a1b5fe96e6c9b32cb1692eb0e9db6df10" name="a1b5fe96e6c9b32cb1692eb0e9db6df10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b5fe96e6c9b32cb1692eb0e9db6df10">&#9670;&nbsp;</a></span>kaji_sync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int kaji_sync </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structkaji.html">kaji</a> *&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>block</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Instructs kaji to make sure all memory changes are persisted. </p>
+<p >Will set errno if something went wrong.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir"></td><td class="paramname">ctx</td><td>Pointer to the kaji context object. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">block</td><td>Whether to block until operation is done.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 if success, 0 &lt; otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="acc8a8c7f17327db240117eb140bc299a" name="acc8a8c7f17327db240117eb140bc299a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc8a8c7f17327db240117eb140bc299a">&#9670;&nbsp;</a></span>kaji_sync_error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * kaji_sync_error </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>error_code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a readable string based on given error code. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">error_code</td><td>The error code.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>String describing the error. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

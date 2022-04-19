@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['file_2eh_0',['file.h',['../file_8h.html',1,'']]],
-  ['fragment_2eh_1',['fragment.h',['../fragment_8h.html',1,'']]]
+  ['data_0',['data',['../structkaji__fragment.html#a13d7022327ab6a93d3cc7c4a6b8b68d0',1,'kaji_fragment']]]
 ];

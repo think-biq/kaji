@@ -89,32 +89,39 @@ $(document).ready(function(){initNavTree('memory_8h_source.html',''); initResiza
 <div class="contents">
 <a href="memory_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// 2022-∞ (c) blurryroots innovation qanat OÜ. All rights reserved.</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See license.md for details.</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"></span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#ifndef _H_KAJI_MEMORY_H_</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define _H_KAJI_MEMORY_H_</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"></span><span class="preprocessor">#ifndef _H_KAJI_MEMORY_H_</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define _H_KAJI_MEMORY_H_</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">struct </span><a class="code hl_struct" href="structkaji.html">kaji</a>;</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">void</span>*</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>kaji_allocate(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint64_t size);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keywordtype">void</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>kaji_free(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, <span class="keywordtype">void</span>* data);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keywordtype">void</span>*</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>kaji_marshall(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint64_t start, uint64_t size);</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keywordtype">void</span>*</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>kaji_spell(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint64_t offset, <span class="keyword">const</span> uint8_t * <span class="keyword">const</span> data, uint64_t size);</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keywordtype">int</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>kaji_sync(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint8_t block);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">const</span> <span class="keywordtype">char</span>*</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>kaji_sync_error(<span class="keywordtype">int</span> error_code);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keywordtype">void</span>*</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><a class="code hl_function" href="memory_8h.html#a7d2e40394ab52f2d7d1cb97249d69d66">kaji_allocate</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint64_t size);</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><a class="code hl_function" href="memory_8h.html#a007abe7a8c10a275fde42273b967f3bc">kaji_free</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, <span class="keywordtype">void</span>* data);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keywordtype">void</span>*</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><a class="code hl_function" href="memory_8h.html#ad89dd9221954905c12248ef9242a2328">kaji_marshall</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint64_t offset, uint64_t size);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keywordtype">void</span>*</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><a class="code hl_function" href="memory_8h.html#ad9fe668819816c7ce88dc34e397a503a">kaji_spell</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint64_t offset</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    , <span class="keyword">const</span> uint8_t * <span class="keyword">const</span> data, uint64_t size);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="keywordtype">int</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><a class="code hl_function" href="memory_8h.html#a1b5fe96e6c9b32cb1692eb0e9db6df10">kaji_sync</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structkaji.html">kaji</a>* ctx, uint8_t block);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keyword">const</span> <span class="keywordtype">char</span>*</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><a class="code hl_function" href="memory_8h.html#acc8a8c7f17327db240117eb140bc299a">kaji_sync_error</a>(<span class="keywordtype">int</span> error_code);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="amemory_8h_html_a007abe7a8c10a275fde42273b967f3bc"><div class="ttname"><a href="memory_8h.html#a007abe7a8c10a275fde42273b967f3bc">kaji_free</a></div><div class="ttdeci">void kaji_free(struct kaji *ctx, void *data)</div><div class="ttdoc">Frees allocated memory block starting at given memory.</div><div class="ttdef"><b>Definition:</b> kaji.c:362</div></div>
+<div class="ttc" id="amemory_8h_html_a1b5fe96e6c9b32cb1692eb0e9db6df10"><div class="ttname"><a href="memory_8h.html#a1b5fe96e6c9b32cb1692eb0e9db6df10">kaji_sync</a></div><div class="ttdeci">int kaji_sync(struct kaji *ctx, uint8_t block)</div><div class="ttdoc">Instructs kaji to make sure all memory changes are persisted.</div><div class="ttdef"><b>Definition:</b> kaji.c:460</div></div>
+<div class="ttc" id="amemory_8h_html_a7d2e40394ab52f2d7d1cb97249d69d66"><div class="ttname"><a href="memory_8h.html#a7d2e40394ab52f2d7d1cb97249d69d66">kaji_allocate</a></div><div class="ttdeci">void * kaji_allocate(struct kaji *ctx, uint64_t size)</div><div class="ttdoc">Allocates the requested memory and keeps track of it.</div><div class="ttdef"><b>Definition:</b> kaji.c:338</div></div>
+<div class="ttc" id="amemory_8h_html_acc8a8c7f17327db240117eb140bc299a"><div class="ttname"><a href="memory_8h.html#acc8a8c7f17327db240117eb140bc299a">kaji_sync_error</a></div><div class="ttdeci">const char * kaji_sync_error(int error_code)</div><div class="ttdoc">Creates a readable string based on given error code.</div><div class="ttdef"><b>Definition:</b> kaji.c:465</div></div>
+<div class="ttc" id="amemory_8h_html_ad89dd9221954905c12248ef9242a2328"><div class="ttname"><a href="memory_8h.html#ad89dd9221954905c12248ef9242a2328">kaji_marshall</a></div><div class="ttdeci">void * kaji_marshall(struct kaji *ctx, uint64_t offset, uint64_t size)</div><div class="ttdoc">Gives access to a block of memory, without allocating it.</div><div class="ttdef"><b>Definition:</b> kaji.c:373</div></div>
+<div class="ttc" id="amemory_8h_html_ad9fe668819816c7ce88dc34e397a503a"><div class="ttname"><a href="memory_8h.html#ad9fe668819816c7ce88dc34e397a503a">kaji_spell</a></div><div class="ttdeci">void * kaji_spell(struct kaji *ctx, uint64_t offset, const uint8_t *const data, uint64_t size)</div><div class="ttdoc">Copies given data to kaji memory.</div><div class="ttdef"><b>Definition:</b> kaji.c:443</div></div>
 <div class="ttc" id="astructkaji_html"><div class="ttname"><a href="structkaji.html">kaji</a></div><div class="ttdef"><b>Definition:</b> kaji.c:36</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->

@@ -87,28 +87,32 @@ $(document).ready(function(){initNavTree('log_8h_source.html',''); initResizable
   <div class="headertitle"><div class="title">log.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#ifndef _H_KAJI_LOG_H_</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#define _H_KAJI_LOG_H_</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>uint8_t kaji_log_active();</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keywordtype">void</span> kaji_log_activate();</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keywordtype">void</span> kaji_log_deactivate();</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#define KAJI_LOG(...) \</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">    { if (kaji_log_active()) { fprintf(stderr, __VA_ARGS__); } }</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#endif</span></div>
+<a href="log_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// 2022-∞ (c) blurryroots innovation qanat OÜ. All rights reserved.</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// See license.md for details.</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"></span><span class="preprocessor">#ifndef _H_KAJI_LOG_H_</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define _H_KAJI_LOG_H_</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>uint8_t <a class="code hl_function" href="log_8h.html#a28ca5938c24723cc14724c55f0ad81fb">kaji_log_active</a>();</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keywordtype">void</span> <a class="code hl_function" href="log_8h.html#ac8cf578e035a74f2ba42d3b292ee1404">kaji_log_activate</a>();</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keywordtype">void</span> <a class="code hl_function" href="log_8h.html#a5ac8e36f201696abc5559ad59d0b7a44">kaji_log_deactivate</a>();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="log_8h.html#a334f88eb87fa7746968aec4d59c53fa9">   37</a></span><span class="preprocessor">#define KAJI_LOG(...) \</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">    { if (kaji_log_active()) { fprintf(stderr, __VA_ARGS__); } }</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="alog_8h_html_a28ca5938c24723cc14724c55f0ad81fb"><div class="ttname"><a href="log_8h.html#a28ca5938c24723cc14724c55f0ad81fb">kaji_log_active</a></div><div class="ttdeci">uint8_t kaji_log_active()</div><div class="ttdoc">Checks whether kaji verbose logging is active.</div><div class="ttdef"><b>Definition:</b> kaji.c:83</div></div>
+<div class="ttc" id="alog_8h_html_a5ac8e36f201696abc5559ad59d0b7a44"><div class="ttname"><a href="log_8h.html#a5ac8e36f201696abc5559ad59d0b7a44">kaji_log_deactivate</a></div><div class="ttdeci">void kaji_log_deactivate()</div><div class="ttdoc">Sets kaji verbose logging inactive.</div><div class="ttdef"><b>Definition:</b> kaji.c:93</div></div>
+<div class="ttc" id="alog_8h_html_ac8cf578e035a74f2ba42d3b292ee1404"><div class="ttname"><a href="log_8h.html#ac8cf578e035a74f2ba42d3b292ee1404">kaji_log_activate</a></div><div class="ttdeci">void kaji_log_activate()</div><div class="ttdoc">Sets kaji verbose logging active.</div><div class="ttdef"><b>Definition:</b> kaji.c:88</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_bfccd401955b95cf8c75461437045ac0.html">inc</a></li><li class="navelem"><a class="el" href="dir_9155aa3befb1c9fe996769e1dd675e70.html">kaji</a></li><li class="navelem"><b>log.h</b></li>
+    <li class="navelem"><a class="el" href="dir_bfccd401955b95cf8c75461437045ac0.html">inc</a></li><li class="navelem"><a class="el" href="dir_9155aa3befb1c9fe996769e1dd675e70.html">kaji</a></li><li class="navelem"><a class="el" href="log_8h.html">log.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3 </li>
   </ul>
 </div>
