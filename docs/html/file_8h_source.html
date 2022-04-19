@@ -94,17 +94,20 @@ $(document).ready(function(){initNavTree('file_8h_source.html',''); initResizabl
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#ifndef _H_KAJI_FILE_H_</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define _H_KAJI_FILE_H_</span></div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>uint8_t</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>kaji_file_create(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, uint64_t size);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>uint8_t</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>kaji_file_expand(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, uint64_t size);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>uint8_t</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>kaji_file_zero(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>uint8_t</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><a class="code hl_function" href="file_8h.html#ad4afdae55245870f8e0cbb745130f1c2">kaji_file_create</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, uint64_t size);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>uint8_t</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><a class="code hl_function" href="file_8h.html#a06c244d0d93e8efaef6b67ad4b5df92c">kaji_file_expand</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path, uint64_t size);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>uint8_t</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><a class="code hl_function" href="file_8h.html#a836926537d47d4a85aae4028a3bdf719">kaji_file_zero</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* path);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="afile_8h_html_a06c244d0d93e8efaef6b67ad4b5df92c"><div class="ttname"><a href="file_8h.html#a06c244d0d93e8efaef6b67ad4b5df92c">kaji_file_expand</a></div><div class="ttdeci">uint8_t kaji_file_expand(const char *path, uint64_t size)</div><div class="ttdoc">Expands an IPC file at path to at least size.</div><div class="ttdef"><b>Definition:</b> kaji.c:154</div></div>
+<div class="ttc" id="afile_8h_html_a836926537d47d4a85aae4028a3bdf719"><div class="ttname"><a href="file_8h.html#a836926537d47d4a85aae4028a3bdf719">kaji_file_zero</a></div><div class="ttdeci">uint8_t kaji_file_zero(const char *path)</div><div class="ttdoc">Overwrites IPC file with 0s.</div><div class="ttdef"><b>Definition:</b> kaji.c:204</div></div>
+<div class="ttc" id="afile_8h_html_ad4afdae55245870f8e0cbb745130f1c2"><div class="ttname"><a href="file_8h.html#ad4afdae55245870f8e0cbb745130f1c2">kaji_file_create</a></div><div class="ttdeci">uint8_t kaji_file_create(const char *path, uint64_t size)</div><div class="ttdoc">Creates an IPC file at path with at least size.</div><div class="ttdef"><b>Definition:</b> kaji.c:140</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

@@ -98,20 +98,124 @@ $(document).ready(function(){initNavTree('file_8h.html',''); initResizable(); })
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad4afdae55245870f8e0cbb745130f1c2"><td class="memItemLeft" align="right" valign="top"><a id="ad4afdae55245870f8e0cbb745130f1c2" name="ad4afdae55245870f8e0cbb745130f1c2"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_file_create</b> (const char *path, uint64_t size)</td></tr>
+<tr class="memitem:ad4afdae55245870f8e0cbb745130f1c2"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file_8h.html#ad4afdae55245870f8e0cbb745130f1c2">kaji_file_create</a> (const char *path, uint64_t size)</td></tr>
+<tr class="memdesc:ad4afdae55245870f8e0cbb745130f1c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an IPC file at path with at least size.  <a href="file_8h.html#ad4afdae55245870f8e0cbb745130f1c2">More...</a><br /></td></tr>
 <tr class="separator:ad4afdae55245870f8e0cbb745130f1c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06c244d0d93e8efaef6b67ad4b5df92c"><td class="memItemLeft" align="right" valign="top"><a id="a06c244d0d93e8efaef6b67ad4b5df92c" name="a06c244d0d93e8efaef6b67ad4b5df92c"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_file_expand</b> (const char *path, uint64_t size)</td></tr>
+<tr class="memitem:a06c244d0d93e8efaef6b67ad4b5df92c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file_8h.html#a06c244d0d93e8efaef6b67ad4b5df92c">kaji_file_expand</a> (const char *path, uint64_t size)</td></tr>
+<tr class="memdesc:a06c244d0d93e8efaef6b67ad4b5df92c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expands an IPC file at path to at least size.  <a href="file_8h.html#a06c244d0d93e8efaef6b67ad4b5df92c">More...</a><br /></td></tr>
 <tr class="separator:a06c244d0d93e8efaef6b67ad4b5df92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a836926537d47d4a85aae4028a3bdf719"><td class="memItemLeft" align="right" valign="top"><a id="a836926537d47d4a85aae4028a3bdf719" name="a836926537d47d4a85aae4028a3bdf719"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>kaji_file_zero</b> (const char *path)</td></tr>
+<tr class="memitem:a836926537d47d4a85aae4028a3bdf719"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="file_8h.html#a836926537d47d4a85aae4028a3bdf719">kaji_file_zero</a> (const char *path)</td></tr>
+<tr class="memdesc:a836926537d47d4a85aae4028a3bdf719"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overwrites IPC file with 0s.  <a href="file_8h.html#a836926537d47d4a85aae4028a3bdf719">More...</a><br /></td></tr>
 <tr class="separator:a836926537d47d4a85aae4028a3bdf719"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Abstraction layer to use memory mapped files for IPC purposes. </p>
 <p >^^ </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="ad4afdae55245870f8e0cbb745130f1c2" name="ad4afdae55245870f8e0cbb745130f1c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4afdae55245870f8e0cbb745130f1c2">&#9670;&nbsp;</a></span>kaji_file_create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t kaji_file_create </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an IPC file at path with at least size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>The path </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. 0 &lt; otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a06c244d0d93e8efaef6b67ad4b5df92c" name="a06c244d0d93e8efaef6b67ad4b5df92c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06c244d0d93e8efaef6b67ad4b5df92c">&#9670;&nbsp;</a></span>kaji_file_expand()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t kaji_file_expand </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Expands an IPC file at path to at least size. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>The path </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">size</td><td>The size</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. 0 &lt; otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="a836926537d47d4a85aae4028a3bdf719" name="a836926537d47d4a85aae4028a3bdf719"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a836926537d47d4a85aae4028a3bdf719">&#9670;&nbsp;</a></span>kaji_file_zero()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t kaji_file_zero </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overwrites IPC file with 0s. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">path</td><td>The path</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on success. 0 &lt; otherwise. </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
