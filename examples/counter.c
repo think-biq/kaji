@@ -15,6 +15,8 @@
 #include <spirits/all.h>
 #include <kaji/all.h>
 
+#include "peom.h"
+
 static uint8_t keep_running = 1;
 void
 handle_signal(int signal_type) {
@@ -50,44 +52,55 @@ void
 output_permissions(mode_t m);
 
 int main(int argc, char** argv) {
+	printf("Setting up signal handler ...\n");
 	signal(SIGINT, handle_signal);
 	signal(SIGTERM, handle_signal);
 
-	char tmppath[L_tmpnam];
-	if (TEMPORA_ERROR == tempora_read(tmppath, L_tmpnam)) {
-		printf(":/\n");
+	char tmppath[TEMPORA_PATH_SIZE];
+	if (TEMPORA_ERROR == tempora_read(tmppath, TEMPORA_PATH_SIZE)) {
+		printf("Could not fetch directory for temporary files :/\n");
 		return -1;
 	}
 
-	size_t l = strlen(tmppath);
-	if (tmppath[l-1] == '/') {
-		strcat(tmppath, "hope.ipc");
-	}
-	else {
-		strcat(tmppath, "/hope.ipc");
-	}
-
+	strcat(tmppath, "/hope.ipc");
 	printf("Setup mapping file at: %s\n", tmppath);
 
 	struct stat fs;
-	stat(tmppath, &fs);
-	output_permissions(fs.st_mode);
-	printf("filesize: %lld\n", fs.st_size);
+	printf("Checking if file already exits ...\n");
+	if (0 == stat(tmppath, &fs)) {
+		printf("Found file.\nMode: ");
+		output_permissions(fs.st_mode);
+		printf("Size: %lld bytes\n", fs.st_size);
+	}
+	else {
+		printf("No temp file found. A new one will be created.\n");
+	}
 
-	uint64_t bind_size = 1*1024*1024; // 16MB
+	kaji_log_activate();
+
 	kaji_t* kaji = kaji_materialize();
+
+	uint64_t bind_size = 13*1024*1024; // 1MB
 	fprintf(stderr, "Binding ...\n");
 	while (0 != kaji_bind(kaji, tmppath, bind_size)) {
 		fprintf(stderr, "Error binding :/ (errno: %i, %s)\n"
 			, errno, strerror(errno));
 		if (ENOMEM == errno) {
 			fprintf(stderr, "Resizing / filling %llu bytes ...\n", bind_size);
-			kaji_zero(tmppath, bind_size);
-			fprintf(stderr, "Retrying binding ...\n");
+			if (0 != kaji_file_expand(tmppath, bind_size)) {
+				fprintf(stderr, "Error expanding :/ (errno: %i, %s)\n"
+					, errno, strerror(errno));
+				return errno;
+			}
+		}
+		else if (ENOENT == errno) {
+			KAJI_LOG("Creating new temp file ...\n");
+			kaji_file_create(tmppath, bind_size);
 		}
 		else {
 			return 13;
 		}
+		fprintf(stderr, "Retrying binding ...\n");
 	}
 
 	if (1 < argc) {
@@ -118,7 +131,7 @@ int main(int argc, char** argv) {
 		printf("ARRGH\n");
 		return 42;
 	}
-	strcpy(keks, "God's love is the answer\n\nHe holds the key to every door\n\nSurely He has the answer\n\nyour heart is searching for\n\n \n\nThere is a resting place\n\nfor our sorrows and tears\n\nA place of peace and comfort\n\nTo toss on Him our cares\n\n \n\nThink, how the Savior suffered\n\nthat we can know today\n\nHow His heart broke in sadness\n\nto take all our burdens away\n\n \n\nHis love never says I've no time\n\nyou, His child, His precious own.\n\nTho you walk, through low valley's,\n\nHe's there, you'll never walk alone\n\n \n\nIf I could give you something\n\nit would be my darling Savior.\n\nI tell you of His caring heart,\n\nTrue to love His own forever.\n\n \n\nHe's waiting with arm's open,\n\njust for you to draw near.\n\nHe's there to lift your spirit,\n\nand put in a bottle all your tears.");
+	strcpy(keks, kaji_examples_peom);
 
 	printf("After allocation:\n");
 	kaji_print_spirits(kaji);
@@ -126,8 +139,11 @@ int main(int argc, char** argv) {
 	printf("Freeing array ...\n");
 	kaji_free(kaji, m);
 
-	printf("After free:\n");
+	printf("After freeing array:\n");
 	kaji_print_spirits(kaji);
+
+	printf("Freeing poem ...\n");
+	kaji_free(kaji, m);	
 
 	printf("Releasing ...\n");
 	if (0 != kaji_release(kaji)) {
@@ -179,7 +195,7 @@ treat_memory(int mode, kaji_t* kaji) {
 			printf("\rTiming:\t\t%u, Other timing:\t%u"
 				, memory->timing, other_memory->timing);
 			fflush(stdout);
-			sleep(1.0);
+			msleep(11);
 		}
 	}
 	else if (1 == mode) {
