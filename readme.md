@@ -14,6 +14,7 @@ You'll find the latest documentation at [kaji.think-biq.com](https://kaji.think-
 ## Example
 
 See [examples/counter.c](examples/counter.c) for a full example.
+For a simple IPC example, checkout [think-biq/kaji-example-sdl](https://github.com/think-biq/kaji-example-sdl).
 
 ### Marshalling memory
 
