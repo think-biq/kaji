@@ -22,7 +22,7 @@ This example showcases how to directly map ranges of memory.
 ```c
 // Creates a new kaji memory management instance.
 kaji_t* kaji = kaji_materialize();
-// Binds kaji to a file serving as actual memory backnig for its operations.
+// Binds kaji to a file serving as actual memory backing for its operations.
 if (0 != kaji_bind(kaji, "/tmp/kaji.ipc", 1024)) {
 	fprintf(stderr, "Error binding :/ (errno: %i, %s)\n"
 		, errno, strerror(errno));
@@ -32,6 +32,9 @@ if (0 != kaji_bind(kaji, "/tmp/kaji.ipc", 1024)) {
 }
 
 // Marshalls memory beginning at offset 0 with size of an unsigned 8 byte integer.
+// There memory is not account for. There is only a sanity check happening regarding
+// the offset and size of the memory area. Useful if you know exactly what the layout
+// will be like.
 uint64_t* number = kaji_marshall(kaji, 0, sizeof(uint64_t));
 
 // This will store the value directly in the virtual memory.
