@@ -23,12 +23,16 @@ static int g_use_kaji = 0;
 static uint8_t g_system_functions_initialized = 0;
 
 static void* (*system_malloc)(size_t) = NULL;
+static void* (*system_calloc)(size_t, size_t) = NULL;
+static void* (*system_realloc)(void*, size_t) = NULL;
 static void* (*system_free)(void*) = NULL;
 
 void
 __gedanken_initialize_memory_functions() {
 	if (0 == g_system_functions_initialized) {
 		system_malloc = dlsym(RTLD_NEXT, "malloc");
+		system_calloc = dlsym(RTLD_NEXT, "calloc");
+		system_realloc = dlsym(RTLD_NEXT, "calloc");
 		system_free = dlsym(RTLD_NEXT, "free");
 		g_system_functions_initialized = 1;
 	}
@@ -38,35 +42,126 @@ void* malloc(size_t size) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
-		printf("Allocating memory (malloc) using kaji ...\n");
+		KAJI_LOG("Allocating memory (malloc) using kaji ...\n");
 		return kaji_allocate(g_kaji, size);
 	}
 
-	printf("Allocating memory (malloc) using SYSTEM ...\n");
-    return system_malloc(size);
+	KAJI_LOG("Allocating memory (malloc) using SYSTEM ...\n");
+	return system_malloc(size);
+}
+
+void* calloc(size_t number_of_elements, size_t element_size) {
+	__gedanken_initialize_memory_functions();
+
+	if (gedanken_is_activated()) {
+		KAJI_LOG("Allocating memory (calloc) using kaji ...\n");
+		size_t total_size = number_of_elements * element_size;
+		void* data = kaji_allocate(g_kaji, total_size);
+		memset(data, 0, total_size);
+		return data;
+	}
+
+	KAJI_LOG("Allocating memory (calloc) using SYSTEM ...\n");
+	return system_calloc(number_of_elements, element_size);
+}
+
+void* realloc(void* data, size_t size) {
+	__gedanken_initialize_memory_functions();
+
+	// The realloc() function shall change the size of the memory object pointed
+	// to by ptr to the size specified by size. The contents of the object shall
+	// remain unchanged up to the lesser of the new and old sizes. If the new size
+	// of the memory object would require movement of the object, the space for
+	// the previous instantiation of the object is freed. If the new size is larger,
+	// the contents of the newly allocated portion of the object are unspecified.
+	// If size is 0 and ptr is not a null pointer, the object pointed to is freed.
+	// If the space cannot be allocated, the object shall remain unchanged.
+
+	// If ptr is a null pointer, realloc() shall be equivalent to malloc() for
+	// the specified size.
+
+	// If ptr does not match a pointer returned earlier by calloc(), malloc(),
+	// or realloc() or if the space has previously been deallocated by a call
+	// to free() or realloc(), the behavior is undefined.
+
+	// The order and contiguity of storage allocated by successive calls to
+	// realloc() is unspecified. The pointer returned if the allocation
+	// succeeds shall be suitably aligned so that it may be assigned to a
+	// pointer to any type of object and then used to access such an object in
+	// the space allocated (until the space is explicitly freed or reallocated).
+	// Each such allocation shall yield a pointer to an object disjoint from any
+	// other object. The pointer returned shall point to the start
+	// (lowest byte address) of the allocated space.
+	// If the space cannot be allocated, a null pointer shall be returned.
+
+	// RETURN VALUE
+	// Upon successful completion with a size not equal to 0, realloc() shall
+	// return a pointer to the (possibly moved) allocated space. If size is 0,
+	// either a null pointer or a unique pointer that can be successfully
+	// passed to free() shall be returned. If there is not enough available memory,
+	// realloc() shall return a null pointer [CX] [Option Start] and set errno to [ENOMEM].
+
+	if (gedanken_is_activated()) {
+		KAJI_LOG("Allocating memory (realloc) using kaji ...\n");
+
+		kaji_fragment_t f;
+		if (kaji_fragment_find(g_kaji, &f, data)) {
+			return NULL;
+		}
+		KAJI_LOG("Preparing swap space of %llu bytes in separate memory ...\n", f.size);
+		// TODO: only allocate swap space that's needed when shrinking.
+		void* swap_space = system_malloc(f.size);
+		memcpy(swap_space, data, f.size);
+		//memset(data, 0, f.size);
+		kaji_free(g_kaji, data);
+
+		KAJI_LOG("Allocating new space through kaji ...\n");
+		void* new_space = kaji_allocate(g_kaji, size);
+		if (NULL != new_space) {
+			if (size > f.size) {
+				KAJI_LOG("Expanding allocation ...\n");
+				memset(new_space, 0, size);
+				memcpy(new_space, swap_space, f.size);
+			}
+			else {
+				KAJI_LOG("Shrinking allocation ...\n");
+				memcpy(new_space, swap_space, size);
+			}
+		}
+		else {
+			KAJI_LOG("Could not allocate space through kaji ...\n");
+		}
+		system_free(swap_space);
+
+		return new_space;
+	}
+	else {
+		KAJI_LOG("Freeing memory using SYSTEM ...\n");
+		return system_realloc(data, size);
+	}
 }
 
 void free(void* memory) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
-		printf("Freeing memory using kaji ...\n");
+		KAJI_LOG("Freeing memory using kaji ...\n");
 		kaji_free(g_kaji, memory);
 	}
 	else {
-		printf("Freeing memory using SYSTEM ...\n");
+		KAJI_LOG("Freeing memory using SYSTEM ...\n");
 		system_free(memory);
 	}
 }
 
 int gedanken_initialize(uint64_t head_size, const char* filename) {
 	KAJI_LOG("Fetching system memory functions ...\n");
-    system_malloc = dlsym(RTLD_NEXT, "malloc");
-    system_free = dlsym(RTLD_NEXT, "free");
+	system_malloc = dlsym(RTLD_NEXT, "malloc");
+	system_free = dlsym(RTLD_NEXT, "free");
 
-    char tmppath[L_tmpnam];
+	char tmppath[L_tmpnam];
 	if (TEMPORA_ERROR == tempora_read(tmppath, L_tmpnam)) {
-		printf(":/\n");
+		KAJI_LOG(":/\n");
 		return -1;
 	}
 
@@ -99,7 +194,7 @@ int gedanken_initialize(uint64_t head_size, const char* filename) {
 		}
 	}
 
-	printf("Activating kaji ...\n");
+	KAJI_LOG("Activating kaji ...\n");
 	g_use_kaji = 1;
 
 	return 0;
@@ -120,13 +215,13 @@ void gedanken_activate(uint8_t active) {
 void gedanken_shutdown() {
 	g_use_kaji = 0;
 
-	printf("Shutting down gedanken ...\n");
+	KAJI_LOG("Shutting down gedanken ...\n");
 	if (0 != kaji_release(g_kaji)) {
-		fprintf(stderr, "Error releasing kaji :/ (errno: %i, %s)\n"
+		KAJI_LOG("Error releasing kaji :/ (errno: %i, %s)\n"
 			, errno, strerror(errno));
 	}
 
-	printf("Dematerializing ...\n");
+	KAJI_LOG("Dematerializing ...\n");
 	kaji_dematerialize(g_kaji);
 
 	g_kaji = NULL;

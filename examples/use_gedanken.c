@@ -20,10 +20,20 @@
 
 #include "peom.h"
 
+struct item {
+	char name[32];
+	uint64_t id;
+	uint8_t flags;
+};
+typedef struct item item_t;
+
 int main () {
-	if (0 != gedanken_initialize(1024, "wurstwasser.ipc")) { // 1 KB
+	const uint64_t memory_size = 1024;
+	if (0 != gedanken_initialize(memory_size, "use_gedanken.ipc")) { // 1 KB
 		printf("Could not setup gedanken!\n");
 	}
+
+	kaji_log_activate();
 
 	// Use gedanken memory management.
 	if (gedanken_is_activated())
@@ -54,6 +64,41 @@ int main () {
 		else {
 			printf("HEULL!\n");
 		}
+
+		kaji_print_spirits(kaji);
+		item_t* items = calloc(10, sizeof(item_t));
+		if (NULL != items) {
+			memset(items, 0xaa, 10*sizeof(item_t));
+			for (uint8_t i = 0; i < 10; ++i) {
+				items[i].name[0] = '\0';
+			}
+			strcpy(items[1].name, "Hans Wurst");
+			strcpy(items[4].name, "Arno Nühm");
+			strcpy(items[9].name, "Karl Heinz");
+			for (uint8_t i = 0; i < 10; ++i) {
+				if ('\0' != items[i].name[0]) {
+					printf("Got a name at %u: %s\n", i, items[i].name);
+				}
+			}
+		}
+		else {
+			printf("Could not calloc!\n");
+		}
+
+		kaji_print_spirits(kaji);
+		items = realloc(items, 5 * sizeof(item_t));
+		if (NULL != items) {
+			for (uint8_t i = 0; i < 5; ++i) {
+				if ('\0' != items[i].name[0]) {
+					printf("Got a name at %u: %s\n", i, items[i].name);
+				}
+			}
+		}
+		else {
+			printf("Could not realloc!\n");
+		}
+
+		kaji_print_spirits(kaji);
 	}
 	else {
 		printf("Skipping gedanken memory example ...\n");

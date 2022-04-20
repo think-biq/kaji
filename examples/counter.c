@@ -222,24 +222,30 @@ treat_memory(int mode, kaji_t* kaji) {
 		while (keep_running) {
 			msleep(333);
 			++(memory->timing);
+#if 0
 			// Since we have access to the fragment, we instruct kaji to only
 			// sync the pages holding the fragment's data.
 			if (0 != kaji_fragment_sync(kaji, &one, 1)) {
 				printf("Error syncing ONE: errno(%i): %s\n"
 					, errno, strerror(errno));
 			}
+#endif
 
 			other_memory->timing = memory->timing + 10;
+#if 0
 			if (0 != kaji_fragment_sync(kaji, &two, 1)) {
 				printf("Error syncing TWO: errno(%i): %s\n"
 					, errno, strerror(errno));
 			}
+#endif
 
+#if 0
 			//Alternativly sync the whole file.
-			/*if (0 != kaji_sync(kaji, 0)) {
+			if (0 != kaji_sync(kaji, 0)) {
 				printf("Error syncing file: errno(%i): %s\n"
 					, errno, strerror(errno));
-			}*/
+			}
+#endif
 
 			printf("\rTiming:\t%u, Other timing:\t%u"
 				, memory->timing, other_memory->timing);

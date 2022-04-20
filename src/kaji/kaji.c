@@ -183,7 +183,7 @@ kaji_file_expand(const char* path, uint64_t size) {
 
 	// just keep writing the missing bytes.
 	uint64_t expansion = size - (uint64_t)current_size;
-	KAJI_LOG("Expanding file with %u bytes from %u to %u ...\n"
+	KAJI_LOG("Expanding file with %llu bytes from %llu to %llu ...\n"
 		, expansion
 		, (uint64_t)current_size
 		, size
@@ -276,16 +276,15 @@ kaji_bind(kaji_t* ctx, const char* path, uint64_t size) {
 		strncpy(ctx->path, path, KAJI_PATH_SIZE);
 	}
 
-	int32_t file_descriptor = open(path, O_RDWR /*| O_CREAT*/, 0666);
+	int32_t file_descriptor = open(path, O_RDWR, 0666);
 	if (0 > file_descriptor) {
-		//errno = ENOENT;
 		return 3;
 	}
 
 	struct stat fs;
 	stat(ctx->path, &fs);
 	if (fs.st_size < size) {
-		KAJI_LOG("File appears to be %u in size, yet needs to be %u ...\n"
+		KAJI_LOG("File appears to be %llu in size, yet needs to be %llu ...\n"
 			, fs.st_size
 			, size
 		);
@@ -336,26 +335,26 @@ kaji_release(kaji_t* ctx) {
 
 void*
 kaji_allocate(kaji_t* ctx, uint64_t size) {
+	// Find the first fitting memory block for given size.
 	uint64_t offset = 0;
 	if (0 == spirits_allocate(&(ctx->spirits), &offset, size)) {
 		KAJI_LOG("Allocated %llu bytes of memory at offset: %llu\n", size, offset);
 	}
 	else {
 		KAJI_LOG("Allocation error :/\n");
+		errno = ENOMEM;
 		return NULL;
 	}
 
-	kaji_fragment_t f = {
-		.offset = offset,
-		.size = size
-	};
-	if (NULL == kaji_fragment_marshall(ctx, &f)) {
-		KAJI_LOG("Could not marshall second fragment :/\n");
+	// Double check that block fits into virtual memory area.
+	if (ctx->size < (offset + size)) {
+		KAJI_LOG("Memory range outside of mapped file bounds!\n");
+		errno = ENOMEM;
 		return NULL;
 	}
-	KAJI_LOG("Allocated fragment of size %llu at %llu.\n", size, offset);
 
-	return f.data;
+	// Return pointer to beginning of the memory area.
+	return (void*)(ctx->memory + offset);
 }
 
 void
