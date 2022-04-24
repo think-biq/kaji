@@ -8,10 +8,15 @@
 
 #include <errno.h>
 #include <assert.h>
-#include <dlfcn.h> // dlsym
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <dlfcn.h> // dlsym
+#endif
 
 #include <tempora/all.h>
 #include <kaji/gedanken.h>
@@ -28,8 +33,19 @@ static void* (*system_free)(void*) = NULL;
 void
 __gedanken_initialize_memory_functions() {
 	if (0 == g_system_functions_initialized) {
+		#if defined(WIN32)
+		system_malloc = GetProcAddress(
+			GetModuleHandleA("kernel32"), 
+			"malloc"
+		);
+		system_free = GetProcAddress(
+      		GetModuleHandleA("kernel32"),
+      		"free"
+      	);
+		#else
 		system_malloc = dlsym(RTLD_NEXT, "malloc");
 		system_free = dlsym(RTLD_NEXT, "free");
+		#endif
 		g_system_functions_initialized = 1;
 	}
 }
@@ -132,5 +148,9 @@ void gedanken_shutdown() {
 	g_kaji = NULL;
 }
 #else
-#warning "Skipping definition of gedanken API!"
+#if defined(WIN32)
+#pragma message( "Skipping definition of gedanken API!" )
+#else
+#warning "Disabling gedanken. Using stubs for API calls!"
+#endif
 #endif
