@@ -49,11 +49,11 @@ if (WIN32)
     endif ()
 
     file(GLOB_RECURSE KAJI_PLATFORM_SRC
-        ${PROJECT_SOURCE_DIR}/src/tempora/win/*.c
+        ${PROJECT_SOURCE_DIR}/src/kaji/win/*.c
     )
 elseif (UNIX)
     file(GLOB_RECURSE KAJI_PLATFORM_SRC
-        ${PROJECT_SOURCE_DIR}/src/tempora/nix/*.c
+        ${PROJECT_SOURCE_DIR}/src/kaji/nix/*.c
     )
 else ()
     message (FATAL_ERROR "Operating system not supported!")

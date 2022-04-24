@@ -11,7 +11,7 @@
 #include <windows.h>
 #include <libloaderapi.h>
 #include <io.h>
-#include "mmap-win.c"
+#include <kaji/win/mman.h>
 #else
 #include <sys/mman.h>
 #include <dlfcn.h> // dlsym
