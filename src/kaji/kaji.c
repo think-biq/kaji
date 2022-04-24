@@ -88,14 +88,15 @@ __kaji_free(void* memory) {
 void
 __kaji_initialize_memory_functions() {
 	if (0 == g_system_functions_initialized) {
-		#if defined(WIN32)
-		system_malloc = GetProcAddress(
-			GetModuleHandleA("kernel32"), 
-			"malloc"
+		printf("Initializing kaji memory ...\n");
+		#if defined(_WIN32)
+		HMODULE hModule = GetModuleHandle(TEXT(UCRTBASEDLL_NAME));
+		assert(NULL != hModule && "Could not get module :/");
+		system_malloc = GetProcAddress(hModule, 
+			TEXT("malloc")
 		);
-		system_free = GetProcAddress(
-      		GetModuleHandleA("kernel32"),
-      		"free"
+		system_free = GetProcAddress(hModule,
+      		TEXT("free")
       	);
 		#else
 		system_malloc = dlsym(RTLD_NEXT, "malloc");

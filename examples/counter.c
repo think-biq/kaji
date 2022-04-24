@@ -1,10 +1,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <direct.h>
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 #include <stdint.h>
 #include <signal.h>
 #include <string.h>
@@ -26,7 +32,12 @@ handle_signal(int signal_type) {
 
 int
 msleep(unsigned int tms) {
+	#if defined(_WIN32)
+	Sleep(tms);
+	return 0;
+	#else
 	return usleep(tms * 1000);
+	#endif
 }
 
 //
@@ -48,9 +59,6 @@ printf_mapped_data(const mapped_data_t* memory);
 uint8_t
 treat_memory(int mode, kaji_t* kaji);
 
-void
-output_permissions(mode_t m);
-
 int main(int argc, char** argv) {
 	printf("Setting up signal handler ...\n");
 	signal(SIGINT, handle_signal);
@@ -68,8 +76,7 @@ int main(int argc, char** argv) {
 	struct stat fs;
 	printf("Checking if file already exits ...\n");
 	if (0 == stat(tmppath, &fs)) {
-		printf("Found file.\nMode: ");
-		output_permissions(fs.st_mode);
+		printf("Found file.\n");
 		printf("Size: %lld bytes\n", fs.st_size);
 	}
 	else {
@@ -269,18 +276,4 @@ printf_mapped_data(const mapped_data_t* memory) {
 	}
 	printf("}\n");
 	printf("Timing: %u\n", memory->timing);
-}
-
-void
-output_permissions(mode_t m) {
-	putchar( m & S_IRUSR ? 'r' : '-' );
-	putchar( m & S_IWUSR ? 'w' : '-' );
-	putchar( m & S_IXUSR ? 'x' : '-' );
-	putchar( m & S_IRGRP ? 'r' : '-' );
-	putchar( m & S_IWGRP ? 'w' : '-' );
-	putchar( m & S_IXGRP ? 'x' : '-' );
-	putchar( m & S_IROTH ? 'r' : '-' );
-	putchar( m & S_IWOTH ? 'w' : '-' );
-	putchar( m & S_IXOTH ? 'x' : '-' );
-	putchar('\n');
 }
