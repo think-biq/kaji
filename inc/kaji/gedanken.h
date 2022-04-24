@@ -82,7 +82,11 @@ void free(void* memory);
 
 #else
 
+#if defined(WIN32)
+#pragma message( "Disabling gedanken. Using stubs for API calls!" )
+#else
 #warning "Disabling gedanken. Using stubs for API calls!"
+#endif
 
 #define gedanken_initialize(...) 1
 #define gedanken_kaji() NULL

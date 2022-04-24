@@ -8,10 +8,15 @@
 
 #include <errno.h>
 #include <assert.h>
-#include <dlfcn.h> // dlsym
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <dlfcn.h> // dlsym
+#endif
 
 #include <tempora/all.h>
 #include <kaji/gedanken.h>
@@ -30,10 +35,27 @@ static void* (*system_free)(void*) = NULL;
 void
 __gedanken_initialize_memory_functions() {
 	if (0 == g_system_functions_initialized) {
+		#if defined(_WIN32)
+		HMODULE hModule = GetModuleHandle(TEXT(UCRTBASEDLL_NAME));
+		assert(NULL != hModule && "Could not get module :/");
+		system_malloc = GetProcAddress(hModule, 
+			TEXT("malloc")
+		);
+		system_calloc = GetProcAddress(hModule, 
+			TEXT("calloc")
+		);
+		system_realloc = GetProcAddress(hModule, 
+			TEXT("realloc")
+		);
+		system_free = GetProcAddress(hModule, 
+			TEXT("free")
+		);
+		#else
 		system_malloc = dlsym(RTLD_NEXT, "malloc");
 		system_calloc = dlsym(RTLD_NEXT, "calloc");
-		system_realloc = dlsym(RTLD_NEXT, "calloc");
+		system_realloc = dlsym(RTLD_NEXT, "realloc");
 		system_free = dlsym(RTLD_NEXT, "free");
+		#endif
 		g_system_functions_initialized = 1;
 	}
 }
@@ -156,8 +178,7 @@ void free(void* memory) {
 
 int gedanken_initialize(uint64_t head_size, const char* filename) {
 	KAJI_LOG("Fetching system memory functions ...\n");
-	system_malloc = dlsym(RTLD_NEXT, "malloc");
-	system_free = dlsym(RTLD_NEXT, "free");
+	__gedanken_initialize_memory_functions();
 
 	char tmppath[L_tmpnam];
 	if (TEMPORA_ERROR == tempora_read(tmppath, L_tmpnam)) {
@@ -227,5 +248,9 @@ void gedanken_shutdown() {
 	g_kaji = NULL;
 }
 #else
-#warning "Skipping definition of gedanken API!"
+#if defined(WIN32)
+#pragma message( "Skipping definition of gedanken API!" )
+#else
+#warning "Disabling gedanken. Using stubs for API calls!"
+#endif
 #endif
