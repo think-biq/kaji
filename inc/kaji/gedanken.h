@@ -74,6 +74,10 @@ void gedanken_shutdown();
 
 void* malloc(size_t size);
 
+void* calloc(size_t number_of_elements, size_t element_size);
+
+void* realloc(void* data, size_t size);
+
 void free(void* memory);
 
 #else
