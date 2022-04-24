@@ -1,17 +1,23 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <direct.h>
+#include <io.h>
+#else
 #include <unistd.h>
+#include <dlfcn.h> // dlsym
+#endif
 #include <stdint.h>
 #include <signal.h>
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <assert.h>
-#include <dlfcn.h> // dlsym
 
 #include <tempora/all.h>
 #include <spirits/all.h>
