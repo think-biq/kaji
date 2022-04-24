@@ -52,6 +52,15 @@ endif()
 if (MSVC)
     # warning level 4 and all warnings as errors
     #add_compile_options(/W4 /WX)
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
+        add_compile_options(/MD)
+    else ()
+        add_compile_options(/MDd)
+    endif ()
+
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS=1)
+    add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE=1)    
+    add_definitions(-Dstrdup=_strdup)
 else()
     # lots of warnings and all warnings as errors
     add_compile_options(-Wunused-result)
@@ -79,7 +88,7 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/deps/tempora/CMakeLists.txt")
 endif()
 add_subdirectory(deps/tempora)
 
-# 
+# .
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/deps/spirits/CMakeLists.txt")
     message(FATAL_ERROR "The submodule 'spirits' could not be fetched! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
 endif()
@@ -97,7 +106,7 @@ set_property(TARGET kaji PROPERTY C_STANDARD 11)
 add_dependencies(kaji tempora spirits)
 target_link_libraries(kaji tempora spirits)
 
-#.
+# .
 add_executable(kaji-example-counter EXCLUDE_FROM_ALL
     ${PROJECT_SOURCE_DIR}/examples/counter.c
 )
@@ -105,10 +114,11 @@ set_property(TARGET kaji-example-counter PROPERTY C_STANDARD 17)
 add_dependencies(kaji-example-counter kaji)
 target_link_libraries(kaji-example-counter kaji)
 
-#.
+# .
 add_executable(kaji-example-gedanken EXCLUDE_FROM_ALL
     ${PROJECT_SOURCE_DIR}/examples/use_gedanken.c
 )
 set_property(TARGET kaji-example-gedanken PROPERTY C_STANDARD 17)
 add_dependencies(kaji-example-gedanken kaji)
+target_link_options(kaji-example-gedanken PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/FORCE:MULTIPLE>)
 target_link_libraries(kaji-example-gedanken kaji)

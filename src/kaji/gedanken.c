@@ -61,6 +61,22 @@ __gedanken_initialize_memory_functions() {
 }
 
 void* malloc(size_t size) {
+    return gedanken_malloc(size);
+}
+
+void* calloc(size_t number_of_elements, size_t element_size) {
+    return gedanken_calloc(number_of_elements, element_size);
+}
+
+void* realloc(void* data, size_t size) {
+    return gedanken_realloc(data, size);
+}
+
+void free(void* memory) {
+    gedanken_free(memory);
+}
+
+void* gedanken_malloc(size_t size) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
@@ -72,7 +88,7 @@ void* malloc(size_t size) {
 	return system_malloc(size);
 }
 
-void* calloc(size_t number_of_elements, size_t element_size) {
+void* gedanken_calloc(size_t number_of_elements, size_t element_size) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
@@ -87,7 +103,7 @@ void* calloc(size_t number_of_elements, size_t element_size) {
 	return system_calloc(number_of_elements, element_size);
 }
 
-void* realloc(void* data, size_t size) {
+void* gedanken_realloc(void* data, size_t size) {
 	__gedanken_initialize_memory_functions();
 
 	// The realloc() function shall change the size of the memory object pointed
@@ -163,7 +179,7 @@ void* realloc(void* data, size_t size) {
 	}
 }
 
-void free(void* memory) {
+void gedanken_free(void* memory) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
