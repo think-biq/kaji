@@ -47,6 +47,16 @@ if (WIN32)
     else ()
         ADD_DEFINITIONS(-DUCRTBASEDLL_NAME="ucrtbased.dll")
     endif ()
+
+    file(GLOB_RECURSE KAJI_PLATFORM_SRC
+        ${PROJECT_SOURCE_DIR}/src/tempora/win/*.c
+    )
+elseif (UNIX)
+    file(GLOB_RECURSE KAJI_PLATFORM_SRC
+        ${PROJECT_SOURCE_DIR}/src/tempora/nix/*.c
+    )
+else ()
+    message (FATAL_ERROR "Operating system not supported!")
 endif()
 
 if (MSVC)
@@ -95,10 +105,10 @@ endif()
 add_subdirectory(deps/spirits)
 
 # Collect source and header files.
-file(GLOB_RECURSE SRC
-    ${PROJECT_SOURCE_DIR}/src/*.c
+file(GLOB KAJI_SRC
+    ${PROJECT_SOURCE_DIR}/src/kaji/*.c
 )
-add_library(kaji ${SRC})
+add_library(kaji ${KAJI_SRC} ${KAJI_PLATFORM_SRC})
 target_include_directories(kaji PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/inc/>
 )
