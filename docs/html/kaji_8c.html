@@ -95,20 +95,21 @@ $(document).ready(function(){initNavTree('kaji_8c.html',''); initResizable(); })
 
 <p>Abstraction layer to use memory mapped files for IPC purposes.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<div class="textblock"><code>#include &lt;sys/mman.h&gt;</code><br />
+<code>#include &lt;dlfcn.h&gt;</code><br />
+<code>#include &lt;unistd.h&gt;</code><br />
+<code>#include &lt;limits.h&gt;</code><br />
+<code>#include &lt;fcntl.h&gt;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
-<code>#include &lt;sys/mman.h&gt;</code><br />
 <code>#include &lt;sys/types.h&gt;</code><br />
 <code>#include &lt;sys/stat.h&gt;</code><br />
-<code>#include &lt;unistd.h&gt;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &lt;signal.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;fcntl.h&gt;</code><br />
 <code>#include &lt;errno.h&gt;</code><br />
 <code>#include &lt;assert.h&gt;</code><br />
 <code>#include &lt;math.h&gt;</code><br />
-<code>#include &lt;dlfcn.h&gt;</code><br />
 <code>#include &lt;spirits/all.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="all_8h_source.html">kaji/all.h</a>&gt;</code><br />
 </div><table class="memberdecls">
@@ -122,9 +123,6 @@ Macros</h2></td></tr>
 <tr class="memitem:a6a0b9d636d7691fb92bcdaaa1d4b9199"><td class="memItemLeft" align="right" valign="top"><a id="a6a0b9d636d7691fb92bcdaaa1d4b9199" name="a6a0b9d636d7691fb92bcdaaa1d4b9199"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>KAJI_PATH_SIZE</b>&#160;&#160;&#160;4096</td></tr>
 <tr class="separator:a6a0b9d636d7691fb92bcdaaa1d4b9199"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03c60a3188720882cc26afedcc37c148"><td class="memItemLeft" align="right" valign="top"><a id="a03c60a3188720882cc26afedcc37c148" name="a03c60a3188720882cc26afedcc37c148"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>KAJI_PAGE_SIZE</b>&#160;&#160;&#160;sysconf(_SC_PAGESIZE)</td></tr>
-<tr class="separator:a03c60a3188720882cc26afedcc37c148"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
