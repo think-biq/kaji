@@ -6,7 +6,7 @@
 	^^
 */
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <libloaderapi.h>
@@ -42,10 +42,10 @@
 
 
 
-static inline size_t _kaji_system_page_size()
-{
+static inline size_t
+_kaji_system_page_size() {
     size_t page_size;
-	#if defined(WIN32)
+	#if defined(_WIN32)
     SYSTEM_INFO sSysInfo;
     GetSystemInfo(&sSysInfo);
     page_size = sSysInfo.dwPageSize;
@@ -258,6 +258,8 @@ kaji_file_zero(const char* path) {
 
 	fseek(f, 0, SEEK_SET);
 	_kaji_file_write_zeroes_f(f, (uint64_t)size);
+
+	fclose(f);
 
 	close(fd);
 
