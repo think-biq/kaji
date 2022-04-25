@@ -264,7 +264,7 @@ void gedanken_shutdown() {
 	g_kaji = NULL;
 }
 #else
-#if defined(WIN32)
+#if defined(_WIN32)
 #pragma message( "Skipping definition of gedanken API!" )
 #else
 #warning "Disabling gedanken. Using stubs for API calls!"

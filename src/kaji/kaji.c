@@ -472,7 +472,7 @@ kaji_fragment_sync(kaji_t* ctx, const kaji_fragment_t* f, uint8_t block) {
 	uint64_t size_padding = f->offset - page_start_offset;
 	size_t size = f->size + size_padding;
 	int flags = 0;
-	#if defined(WIN32)
+	#if defined(_WIN32)
 	return 1;
 	#else
 	flags = block ? MS_SYNC : MS_ASYNC;
@@ -500,7 +500,7 @@ kaji_spell(kaji_t* ctx, uint64_t offset, const uint8_t * const data, uint64_t si
 int
 kaji_sync(kaji_t* ctx, uint8_t block) {
 	int flags = 0;
-	#if defined(WIN32)
+	#if defined(_WIN32)
 	return 1;
 	#else
 	flags = block ? MS_SYNC : MS_ASYNC;
