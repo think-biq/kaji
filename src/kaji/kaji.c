@@ -6,20 +6,29 @@
 	^^
 */
 
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <libloaderapi.h>
+#include <io.h>
+#include <kaji/win/mman.h>
+#else
+#include <sys/mman.h>
+#include <dlfcn.h> // dlsym
+#include <unistd.h>
+#endif
+#include <limits.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <stdint.h>
 #include <signal.h>
 #include <string.h>
-#include <fcntl.h>
 #include <errno.h>
 #include <assert.h>
 #include <math.h>
-#include <dlfcn.h> // dlsym
 
 #include <spirits/all.h>
 
@@ -31,7 +40,22 @@
 #define KAJI_PATH_SIZE 4096
 #endif
 
-#define KAJI_PAGE_SIZE sysconf(_SC_PAGESIZE)
+
+
+static inline size_t
+_kaji_system_page_size() {
+    size_t page_size;
+	#if defined(_WIN32)
+    SYSTEM_INFO sSysInfo;
+    GetSystemInfo(&sSysInfo);
+    page_size = sSysInfo.dwPageSize;
+	#elif defined(PAGESIZE) // defined in limits.h
+    page_size = PAGESIZE;
+	#else                   // assume some POSIX OS
+    page_size = sysconf(_SC_PAGESIZE);
+	#endif
+    return page_size;
+} 
 
 struct kaji {
 	uint8_t* memory;
@@ -64,8 +88,20 @@ __kaji_free(void* memory) {
 void
 __kaji_initialize_memory_functions() {
 	if (0 == g_system_functions_initialized) {
+		printf("Initializing kaji memory ...\n");
+		#if defined(_WIN32)
+		HMODULE hModule = GetModuleHandle(TEXT(UCRTBASEDLL_NAME));
+		assert(NULL != hModule && "Could not get module :/");
+		(FARPROC)system_malloc = GetProcAddress(hModule, 
+			TEXT("malloc")
+		);
+		(FARPROC)system_free = GetProcAddress(hModule,
+      		TEXT("free")
+      	);
+		#else
 		system_malloc = dlsym(RTLD_NEXT, "malloc");
 		system_free = dlsym(RTLD_NEXT, "free");
+		#endif
 		g_system_functions_initialized = 1;
 	}
 }
@@ -222,6 +258,8 @@ kaji_file_zero(const char* path) {
 
 	fseek(f, 0, SEEK_SET);
 	_kaji_file_write_zeroes_f(f, (uint64_t)size);
+
+	fclose(f);
 
 	close(fd);
 
@@ -387,8 +425,8 @@ kaji_marshall(kaji_t* ctx, uint64_t offset, uint64_t size) {
 
 uint64_t
 kaji_fragment_page(const kaji_fragment_t* f) {
-	return (uint64_t)floor(
-		f->offset / (uint64_t)KAJI_PAGE_SIZE
+	return (uint64_t)(
+		f->offset / (uint64_t)_kaji_system_page_size()
 	);
 }
 
@@ -427,15 +465,19 @@ int
 kaji_fragment_sync(kaji_t* ctx, const kaji_fragment_t* f, uint8_t block) {
 	uint64_t page = kaji_fragment_page(f);
 	uint64_t page_start_offset = 0 < page
-		? page * KAJI_PAGE_SIZE - 1
+		? page * _kaji_system_page_size() - 1
 		: 0
 		;
 	void* page_address = ctx->memory + page_start_offset;
 	uint64_t size_padding = f->offset - page_start_offset;
 	size_t size = f->size + size_padding;
-	int flags = block ? MS_SYNC : MS_ASYNC;
-
+	int flags = 0;
+	#if defined(_WIN32)
+	return 1;
+	#else
+	flags = block ? MS_SYNC : MS_ASYNC;
 	return msync(page_address, size, flags);
+	#endif
 }
 
 void*
@@ -457,7 +499,13 @@ kaji_spell(kaji_t* ctx, uint64_t offset, const uint8_t * const data, uint64_t si
 
 int
 kaji_sync(kaji_t* ctx, uint8_t block) {
-	return msync(ctx->memory, ctx->size, block ? MS_SYNC : MS_ASYNC);
+	int flags = 0;
+	#if defined(_WIN32)
+	return 1;
+	#else
+	flags = block ? MS_SYNC : MS_ASYNC;
+	return msync(ctx->memory, ctx->size, flags);
+	#endif
 }
 
 const char*

@@ -8,10 +8,15 @@
 
 #include <errno.h>
 #include <assert.h>
-#include <dlfcn.h> // dlsym
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <dlfcn.h> // dlsym
+#endif
 
 #include <tempora/all.h>
 #include <kaji/gedanken.h>
@@ -30,15 +35,48 @@ static void* (*system_free)(void*) = NULL;
 void
 __gedanken_initialize_memory_functions() {
 	if (0 == g_system_functions_initialized) {
+		#if defined(_WIN32)
+		HMODULE hModule = GetModuleHandle(TEXT(UCRTBASEDLL_NAME));
+		assert(NULL != hModule && "Could not get module :/");
+		system_malloc = GetProcAddress(hModule, 
+			TEXT("malloc")
+		);
+		system_calloc = GetProcAddress(hModule, 
+			TEXT("calloc")
+		);
+		system_realloc = GetProcAddress(hModule, 
+			TEXT("realloc")
+		);
+		system_free = GetProcAddress(hModule, 
+			TEXT("free")
+		);
+		#else
 		system_malloc = dlsym(RTLD_NEXT, "malloc");
 		system_calloc = dlsym(RTLD_NEXT, "calloc");
-		system_realloc = dlsym(RTLD_NEXT, "calloc");
+		system_realloc = dlsym(RTLD_NEXT, "realloc");
 		system_free = dlsym(RTLD_NEXT, "free");
+		#endif
 		g_system_functions_initialized = 1;
 	}
 }
 
 void* malloc(size_t size) {
+    return gedanken_malloc(size);
+}
+
+void* calloc(size_t number_of_elements, size_t element_size) {
+    return gedanken_calloc(number_of_elements, element_size);
+}
+
+void* realloc(void* data, size_t size) {
+    return gedanken_realloc(data, size);
+}
+
+void free(void* memory) {
+    gedanken_free(memory);
+}
+
+void* gedanken_malloc(size_t size) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
@@ -50,7 +88,7 @@ void* malloc(size_t size) {
 	return system_malloc(size);
 }
 
-void* calloc(size_t number_of_elements, size_t element_size) {
+void* gedanken_calloc(size_t number_of_elements, size_t element_size) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
@@ -65,7 +103,7 @@ void* calloc(size_t number_of_elements, size_t element_size) {
 	return system_calloc(number_of_elements, element_size);
 }
 
-void* realloc(void* data, size_t size) {
+void* gedanken_realloc(void* data, size_t size) {
 	__gedanken_initialize_memory_functions();
 
 	// The realloc() function shall change the size of the memory object pointed
@@ -141,7 +179,7 @@ void* realloc(void* data, size_t size) {
 	}
 }
 
-void free(void* memory) {
+void gedanken_free(void* memory) {
 	__gedanken_initialize_memory_functions();
 
 	if (gedanken_is_activated()) {
@@ -156,8 +194,7 @@ void free(void* memory) {
 
 int gedanken_initialize(uint64_t head_size, const char* filename) {
 	KAJI_LOG("Fetching system memory functions ...\n");
-	system_malloc = dlsym(RTLD_NEXT, "malloc");
-	system_free = dlsym(RTLD_NEXT, "free");
+	__gedanken_initialize_memory_functions();
 
 	char tmppath[L_tmpnam];
 	if (TEMPORA_ERROR == tempora_read(tmppath, L_tmpnam)) {
@@ -227,5 +264,9 @@ void gedanken_shutdown() {
 	g_kaji = NULL;
 }
 #else
-#warning "Skipping definition of gedanken API!"
+#if defined(_WIN32)
+#pragma message( "Skipping definition of gedanken API!" )
+#else
+#warning "Disabling gedanken. Using stubs for API calls!"
+#endif
 #endif

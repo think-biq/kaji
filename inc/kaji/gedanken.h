@@ -67,6 +67,15 @@ uint8_t gedanken_is_activated();
  */
 void gedanken_activate(uint8_t active);
 
+
+void* gedanken_malloc(size_t size);
+
+void* gedanken_calloc(size_t number_of_elements, size_t element_size);
+
+void* gedanken_realloc(void* data, size_t size);
+
+void gedanken_free(void* memory);
+
 /**
  * @brief      Shuts down gedanken system and releases all memory.
  */
@@ -82,7 +91,11 @@ void free(void* memory);
 
 #else
 
+#if defined(_WIN32)
+#pragma message( "Disabling gedanken. Using stubs for API calls!" )
+#else
 #warning "Disabling gedanken. Using stubs for API calls!"
+#endif
 
 #define gedanken_initialize(...) 1
 #define gedanken_kaji() NULL

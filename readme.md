@@ -55,6 +55,14 @@ kaji_dematerialize(kaji);
 
 Using *gedanken.h* you can change the allocation behavior of malloc, calloc and realloc (as well as free of course).
 
+#### Heads up
+
+To allow multiple parallel symbold definitions (which is the case if you plan to use gedanken for memory allocation), and you want to build on Windows, then you need to specify the following compiler flag for MSVC:
+```bash
+/FORCE:MULTIPLE
+```
+Checkout this [answer on stackoverflow](https://stackoverflow.com/a/58010840), or the [cmake build](CMakeLists.txt) script in this project on how to enable this when linking with kaji with gedanken enabled.
+
 ```c
 // Call this before any usage of memory functions. This will setup the redefinitions
 // as well as prepare and bind the virtual memory file.
